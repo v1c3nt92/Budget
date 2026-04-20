@@ -2,61 +2,52 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>💰 Budget Mensuel</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 40px;}
 h1,h2{font-family:'Syne',sans-serif;}
 
-/* Header centré comme ton Image 2 */
+/* Header centré - Style Image 2 */
 .hdr{display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:25px; position:relative;}
 .hdr-titles h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;}
-.hdr-subtitle{font-size:0.85rem;color:var(--m);margin-top:8px;}
-.hdr-tools{position:absolute; top:0; right:0; display:flex; gap:10px;}
-.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem;}
+.hdr-subtitle{font-size:0.8rem;color:var(--m);margin-top:8px;}
+.hdr-tools{position:absolute; top:0; right:0; display:flex; gap:8px;}
+.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer;}
 
-/* Les 4 cartes de ton Image 2 */
+/* Cartes de résumé */
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
 .card{background:var(--s);border:1px solid var(--b);border-radius:13px;padding:13px;position:relative;overflow:hidden;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:13px 13px 0 0;}
-.card.pu::before{background:#6c63ff;} /* Bleu/Violet */
-.card.pi::before{background:#ff6584;} /* Rose */
-.card.gr::before{background:#43e97b;} /* Vert */
-.card.or::before{background:#ff9f43;} /* Orange */
-.cl{font-size:.64rem;color:var(--m);text-transform:uppercase;margin-bottom:3px;letter-spacing:0.5px;}
-.cv{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;}
-.cv.pu{color:#6c63ff;}
-.cv.pi{color:#ff6584;}
-.cv.gr{color:#43e97b;}
-.cv.or{color:#ff9f43;}
+.card.pu::before{background:#6c63ff;} .card.pi::before{background:#ff6584;}
+.card.gr::before{background:#43e97b;} .card.or::before{background:#ff9f43;}
+.cl{font-size:.6rem;color:var(--m);text-transform:uppercase;margin-bottom:3px;letter-spacing:0.5px;}
+.cv{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;}
 
-/* Sections */
+/* Sections et Tableaux */
 .sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
 .sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);}
 .sh h2{font-size:.9rem;font-weight:700;display:flex;align-items:center;gap:8px;}
-.bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:500;background:rgba(108,99,255,.18);color:#6c63ff;}
-
+.bk{font-size:.65rem;padding:2px 8px;border-radius:20px;background:rgba(108,99,255,0.15);color:#6c63ff;}
 table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:8px 14px;font-size:.65rem;color:var(--m);text-transform:uppercase;background:rgba(255,255,255,0.02);letter-spacing:0.5px;}
+th{text-align:left;padding:8px 14px;font-size:.6rem;color:var(--m);text-transform:uppercase;background:rgba(255,255,255,0.02);}
 td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:pointer;}
 .ta{text-align:right;font-family:'Syne',sans-serif;font-weight:700;}
-.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:1rem;padding:5px;}
+.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:1.1rem;padding:5px;}
 
-/* Boutons ajout */
-.ba{background:rgba(108,99,255,.05);border:1px dashed rgba(108,99,255,.3);color:#6c63ff;border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:100%;margin:10px 0;}
-.ap{padding:0 14px;}
-.rem-info{font-size:0.6rem;color:var(--m);display:block;margin-top:3px;}
+/* Boutons */
+.ba{background:rgba(108,99,255,0.05);border:1px dashed rgba(108,99,255,0.3);color:#6c63ff;border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:100%;margin:10px 0;}
+.rem-info{font-size:0.6rem;color:var(--m);display:block;margin-top:2px;}
 .rem-total{color:#43e97b;font-weight:700;}
 
 /* Modaux */
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px);}
-.mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:350px;}
-.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(8px);}
+.mb{background:var(--s);border:2px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:350px;}
+.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;font-size:1rem;}
 .btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 </style>
 </head>
@@ -68,44 +59,42 @@ td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:po
     <div class="hdr-subtitle">Appuie sur un nom ou montant pour modifier</div>
   </div>
   <div class="hdr-tools">
-    <button class="btn-icon" onclick="exportData()" title="Sauvegarder">💾</button>
-    <button class="btn-icon" onclick="importData()" title="Charger">📥</button>
+    <button class="btn-icon" onclick="exportData()">💾</button>
+    <button class="btn-icon" onclick="importData()">📥</button>
   </div>
 </div>
 
 <div class="cards">
-  <div class="card pu"><div class="cl">Total mensuel</div><div class="cv pu" id="ct">0,00 €</div></div>
-  <div class="card pi"><div class="cl">Part /Personne</div><div class="cv pi" id="ch">0,00 €</div></div>
-  <div class="card gr"><div class="cl">Total annuel</div><div class="cv gr" id="cy">0,00 €</div></div>
-  <div class="card or"><div class="cl">Charges annuelles</div><div class="cv or" id="ca">0,00 €</div></div>
+  <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct" style="color:#6c63ff">0,00 €</div></div>
+  <div class="card pi"><div class="cl">Part /Personne</div><div class="cv" id="ch" style="color:#ff6584">0,00 €</div></div>
+  <div class="card gr"><div class="cl">Total annuel</div><div class="cv" id="cy" style="color:#43e97b">0,00 €</div></div>
+  <div class="card or"><div class="cl">Charges annuelles</div><div class="cv" id="ca" style="color:#ff9f43">0,00 €</div></div>
 </div>
 
 <div id="sc"></div>
 
-<div class="ap" style="margin-top: 20px;">
+<div style="padding:0 14px;">
     <button class="ba" style="background:rgba(67,233,123,0.05); border-color:rgba(67,233,123,0.3); color:#43e97b;" onclick="openCatModal()">📁 Ajouter une catégorie</button>
 </div>
 
 <div class="mo" id="modal">
   <div class="mb">
-    <h3 id="modal-title" style="margin-bottom:15px; font-family:Syne;">➕ Ajouter</h3>
-    <input class="fi" id="nn" placeholder="Nom de la facture">
+    <h3 id="modal-title" style="margin-bottom:15px; font-family:Syne;">✏️ Modifier</h3>
+    <input class="fi" id="nn" placeholder="Nom">
     <input class="fi" id="na" type="number" step="0.01" placeholder="Montant €">
-    <input class="fi" id="ne" placeholder="Emoji (🏠, 💳...)">
+    <input class="fi" id="ne" placeholder="Emoji">
     
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-      <input type="checkbox" id="is-plan" onchange="togglePlanFields(this.checked)">
-      <span style="font-size:0.85rem">📅 Échéancier (Crédit/Dette)</span>
+      <input type="checkbox" id="is-plan" onchange="document.getElementById('p-fields').style.display=this.checked?'block':'none'">
+      <span style="font-size:0.85rem">📅 Échéancier (Dettes)</span>
     </div>
-
-    <div id="plan-fields" style="display:none; border-left:2px solid var(--a); padding-left:12px; margin-bottom:15px;">
-      <input class="fi" id="n-months" type="number" placeholder="Mois restants" value="12">
-      <input class="fi" id="pay-day" type="number" placeholder="Jour prélèvement" value="22">
+    <div id="p-fields" style="display:none; border-left:2px solid var(--a); padding-left:12px; margin-bottom:15px;">
+      <input class="fi" id="ml" type="number" placeholder="Mois restants">
+      <input class="fi" id="py" type="number" placeholder="Jour prélèvement">
     </div>
-
     <div class="btn-grid">
-      <button class="fi" style="background:var(--s2); border:none; color:var(--m)" onclick="closeModal()">Annuler</button>
-      <button class="fi" style="background:var(--a); border:none; color:white; font-weight:bold;" onclick="saveItem()">Valider ✓</button>
+      <button class="fi" style="background:var(--s2); border:none;" onclick="closeModal()">Annuler</button>
+      <button class="fi" style="background:var(--a); border:none; color:white; font-weight:700;" onclick="saveItem()">Valider ✓</button>
     </div>
   </div>
 </div>
@@ -113,95 +102,85 @@ td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:po
 <div class="mo" id="modal-cat">
   <div class="mb">
     <h3 style="margin-bottom:15px; font-family:Syne;">📁 Nouvelle Catégorie</h3>
-    <input class="fi" id="cn" placeholder="Nom (ex: Voiture)">
-    <input class="fi" id="ce" placeholder="Emoji (ex: 🚗)">
+    <input class="fi" id="cn" placeholder="Nom">
+    <input class="fi" id="ce" placeholder="Emoji">
     <div class="btn-grid">
-      <button class="fi" style="background:var(--s2); border:none; color:var(--m)" onclick="document.getElementById('modal-cat').style.display='none'">Annuler</button>
-      <button class="fi" style="background:#43e97b; border:none; color:black; font-weight:bold;" onclick="addCategory()">Créer ✓</button>
+      <button class="fi" style="background:var(--s2); border:none;" onclick="document.getElementById('modal-cat').style.display='none'">Annuler</button>
+      <button class="fi" style="background:#43e97b; border:none; color:black; font-weight:700;" onclick="addCategory()">Créer ✓</button>
     </div>
   </div>
 </div>
 
 <script>
-// CLÉ TOTALEMENT NOUVELLE POUR DÉTRUIRE L'ANCIEN CACHE
-const SAVE_KEY = 'budget_v_absolue_finale';
-
-// TES DONNÉES DE L'IMAGE 2
+// RESTAURATION DE TOUTES TES FACTURES HISTORIQUES
+const KEY = 'budget_full_history_v1';
 const INITIAL = {
   sections: [
     {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
         {id:'r1', n:'Crédit maison', a:552.80, e:'🏠', isP:false},
         {id:'r2', n:'Électricité / Gaz', a:120.00, e:'⚡', isP:false},
         {id:'r3', n:'Eau', a:35.78, e:'💦', isP:false},
-        {id:'r4', n:'Internet', a:70.00, e:'🌐', isP:false}
+        {id:'r4', n:'Internet', a:70.00, e:'🌐', isP:false},
+        {id:'r10', n:'Taxe Poubelle', a:15.50, e:'🗑️', isP:false}
     ]},
-    {id:'s2', icon:'💳', title:'Crédits', rows:[
+    {id:'s2', icon:'🛡️', title:'Assurances', rows:[
+        {id:'r11', n:'Assurance Auto', a:65.00, e:'🚗', isP:false},
+        {id:'r12', n:'Assurance Habitation', a:28.00, e:'🏡', isP:false},
+        {id:'r13', n:'Mutuelle / Hospit', a:42.00, e:'🏥', isP:false}
+    ]},
+    {id:'s3', icon:'💳', title:'Crédits', rows:[
         {id:'r5', n:'Buy Way (crédit conso)', a:124.00, e:'💳', isP:true, ml:12, py:22, pd:false}
+    ]},
+    {id:'s4', icon:'📱', title:'Télécom', rows:[
+        {id:'r14', n:'Forfait Mobile 1', a:20.00, e:'📱', isP:false},
+        {id:'r15', n:'Forfait Mobile 2', a:20.00, e:'📱', isP:false}
+    ]},
+    {id:'s5', icon:'💸', title:'Impôts & Taxes', rows:[
+        {id:'r16', n:'Impôts annuels', a:82.00, e:'🧾', isP:false},
+        {id:'r17', n:'Taxe Circulation', a:35.00, e:'🛣️', isP:false}
+    ]},
+    {id:'s6', icon:'📺', title:'Loisirs & Subs', rows:[
+        {id:'r18', n:'Netflix', a:17.99, e:'🎬', isP:false},
+        {id:'r19', n:'Disney+', a:8.99, e:'🐭', isP:false},
+        {id:'r20', n:'Spotify', a:14.99, e:'🎵', isP:false}
     ]}
   ],
   lastM: new Date().getMonth()
 };
 
-let ST = JSON.parse(localStorage.getItem(SAVE_KEY)) || INITIAL;
+let ST = JSON.parse(localStorage.getItem(KEY)) || INITIAL;
 let editCtx = null;
 
-function sync() { 
-  localStorage.setItem(SAVE_KEY, JSON.stringify(ST)); 
-  render(); 
-}
-
-function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €'; }
-function togglePlanFields(show) { document.getElementById('plan-fields').style.display = show ? 'block' : 'none'; }
-
-function checkLogic() {
-  const now = new Date(); const m = now.getMonth(); const d = now.getDate();
-  ST.sections.forEach(sec => {
-    sec.rows.forEach(r => {
-      if (r.isP) {
-        if (ST.lastM !== m) r.pd = false;
-        if (d >= r.py && !r.pd) { r.ml -= 1; r.pd = true; }
-      }
-    });
-    sec.rows = sec.rows.filter(r => !r.isP || r.ml > 0);
-  });
-  ST.lastM = m;
-}
+function sync() { localStorage.setItem(KEY, JSON.stringify(ST)); render(); }
+function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
 
 function render() {
-  checkLogic();
   const container = document.getElementById('sc');
   container.innerHTML = '';
-  let tM = 0; let tD = 0; // tM = Total Mensuel, tD = Dettes/Charges
+  let tM = 0; let tD = 0;
 
   ST.sections.forEach(sec => {
     let sT = 0;
-    let rowsHtml = sec.rows.map((r) => {
-      const isPaid = r.isP && r.pd;
-      if (!isPaid) { sT += r.a; tM += r.a; }
-      if (r.isP) tD += (r.a * r.ml); // Calcul des crédits restants
-
-      return `<tr style="${isPaid ? 'opacity:0.4' : ''}">
+    let rowsHtml = sec.rows.map(r => {
+      sT += r.a; tM += r.a;
+      if (r.isP) tD += (r.a * r.ml);
+      return `<tr>
         <td onclick="openEdit('${sec.id}', '${r.id}')">
-          <span style="font-weight:500">${r.e || ''} ${r.n} ${isPaid ? '✅' : ''}</span>
-          ${r.isP ? `<span class="rem-info">Reste <span class="rem-total">${fmt(r.a * r.ml)}</span> (${r.ml} mois)</span>` : ''}
+          <span style="font-weight:500">${r.e||''} ${r.n}</span>
+          ${r.isP ? `<span class="rem-info">Reste <span class="rem-total">${fmt(r.a * r.ml)}</span></span>` : ''}
         </td>
         <td class="ta" onclick="openEdit('${sec.id}', '${r.id}')">${fmt(r.a)}</td>
-        <td style="text-align:right; width:40px;"><button class="bd" onclick="delItem('${sec.id}', '${r.id}')">🗑️</button></td>
+        <td style="width:40px; text-align:right;"><button class="bd" onclick="delItem('${sec.id}', '${r.id}')">🗑️</button></td>
       </tr>`;
     }).join('');
 
     const div = document.createElement('div');
     div.className = 'sec';
     div.innerHTML = `
-      <div class="sh" onclick="renameCat('${sec.id}')">
-        <h2>${sec.icon} ${sec.title} <span class="bk">${fmt(sT)}</span></h2>
-        <button class="bd" style="font-size:0.8rem;" onclick="event.stopPropagation(); delCat('${sec.id}')">🗑️</button>
-      </div>
-      <table>
-        <thead><tr><th>Facture</th><th class="ta">Montant</th><th></th></tr></thead>
-        <tbody>${rowsHtml}</tbody>
-      </table>
-      <div class="ap"><button class="ba" onclick="openAdd('${sec.id}')">➕ Ajouter une facture</button></div>
+      <div class="sh" onclick="renameCat('${sec.id}')"><h2>${sec.icon} ${sec.title} <span class="bk">${fmt(sT)}</span></h2>
+      <button class="bd" style="font-size:0.8rem" onclick="event.stopPropagation(); delCat('${sec.id}')">🗑️</button></div>
+      <table><thead><tr><th>FACTURE</th><th class="ta">MONTANT</th><th></th></tr></thead><tbody>${rowsHtml}</tbody></table>
+      <div style="padding:0 14px;"><button class="ba" onclick="openAdd('${sec.id}')">➕ Ajouter une facture</button></div>
     `;
     container.appendChild(div);
   });
@@ -209,76 +188,50 @@ function render() {
   document.getElementById('ct').innerText = fmt(tM);
   document.getElementById('ch').innerText = fmt(tM/2);
   document.getElementById('cy').innerText = fmt(tM * 12);
-  // Estimation basique pour "Charges annuelles" si tu avais une logique différente avant.
-  document.getElementById('ca').innerText = fmt(tD > 0 ? tD : (tM*12)*0.05); 
-}
-
-function openAdd(sid) {
-  editCtx = { sid, rid: null };
-  document.getElementById('modal-title').innerText = "➕ Ajouter";
-  document.getElementById('nn').value = ''; document.getElementById('na').value = ''; document.getElementById('ne').value = '';
-  document.getElementById('is-plan').checked = false; togglePlanFields(false);
-  document.getElementById('modal').style.display = 'flex';
+  document.getElementById('ca').innerText = fmt(tD > 0 ? tD : 0);
 }
 
 function openEdit(sid, rid) {
-  const item = ST.sections.find(s => s.id === sid).rows.find(r => r.id === rid);
-  editCtx = { sid, rid };
+  const item = ST.sections.find(s=>s.id===sid).rows.find(r=>r.id===rid);
+  editCtx = {sid, rid};
   document.getElementById('modal-title').innerText = "✏️ Modifier";
-  document.getElementById('nn').value = item.n;
-  document.getElementById('na').value = item.a;
-  document.getElementById('ne').value = item.e || '';
-  document.getElementById('is-plan').checked = item.isP;
-  document.getElementById('n-months').value = item.ml || 12;
-  document.getElementById('pay-day').value = item.py || 22;
-  togglePlanFields(item.isP);
+  document.getElementById('nn').value = item.n; document.getElementById('na').value = item.a;
+  document.getElementById('ne').value = item.e||''; document.getElementById('is-plan').checked = item.isP;
+  document.getElementById('ml').value = item.ml||12; document.getElementById('py').value = item.py||22;
+  document.getElementById('p-fields').style.display = item.isP ? 'block' : 'none';
+  document.getElementById('modal').style.display = 'flex';
+}
+
+function openAdd(sid) {
+  editCtx = {sid, rid:null};
+  document.getElementById('modal-title').innerText = "➕ Ajouter";
+  document.getElementById('nn').value=''; document.getElementById('na').value=''; document.getElementById('ne').value='';
+  document.getElementById('is-plan').checked=false; document.getElementById('p-fields').style.display='none';
   document.getElementById('modal').style.display = 'flex';
 }
 
 function saveItem() {
   const n = document.getElementById('nn').value, a = parseFloat(document.getElementById('na').value);
-  if (!n || isNaN(a)) return;
-  const sec = ST.sections.find(s => s.id === editCtx.sid);
-  const data = {
-    n, a, e: document.getElementById('ne').value,
-    isP: document.getElementById('is-plan').checked,
-    ml: parseInt(document.getElementById('n-months').value) || 0,
-    py: parseInt(document.getElementById('pay-day').value) || 1,
-    pd: false
-  };
-
-  if (editCtx.rid) { 
-    const idx = sec.rows.findIndex(r => r.id === editCtx.rid);
-    sec.rows[idx] = { ...sec.rows[idx], ...data };
-  } else { 
-    sec.rows.push({ id: 'r'+Date.now(), ...data });
-  }
+  if(!n || isNaN(a)) return;
+  const data = { n, a, e:document.getElementById('ne').value, isP:document.getElementById('is-plan').checked, ml:parseInt(document.getElementById('ml').value)||0, py:parseInt(document.getElementById('py').value)||1, pd:false };
+  const sec = ST.sections.find(s=>s.id===editCtx.sid);
+  if(editCtx.rid) { const idx = sec.rows.findIndex(r=>r.id===editCtx.rid); sec.rows[idx] = {id:editCtx.rid, ...data}; }
+  else { sec.rows.push({id:'r'+Date.now(), ...data}); }
   closeModal(); sync();
 }
 
-function delItem(sid, rid) { if(confirm('Supprimer cette ligne ?')) { const s = ST.sections.find(x=>x.id===sid); s.rows = s.rows.filter(r=>r.id!==rid); sync(); } }
+function delItem(sid, rid) { if(confirm('Supprimer ?')) { const s = ST.sections.find(x=>x.id===sid); s.rows = s.rows.filter(r=>r.id!==rid); sync(); } }
 function openCatModal() { document.getElementById('modal-cat').style.display = 'flex'; }
-function addCategory() {
-  const n = document.getElementById('cn').value, e = document.getElementById('ce').value;
-  if(n) { ST.sections.push({ id: 's'+Date.now(), icon: e||'📁', title: n, rows: [] }); sync(); document.getElementById('modal-cat').style.display='none'; }
-}
-function delCat(sid) { if(confirm('Supprimer toute la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
-function renameCat(sid) { const s = ST.sections.find(x=>x.id===sid); const newT = prompt("Renommer la catégorie :", s.title); if(newT) { s.title = newT; sync(); } }
+function addCategory() { const n = document.getElementById('cn').value; if(n) { ST.sections.push({id:'s'+Date.now(), icon:document.getElementById('ce').value||'📁', title:n, rows:[]}); sync(); document.getElementById('modal-cat').style.display='none'; } }
+function delCat(sid) { if(confirm('Supprimer la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
+function renameCat(sid) { const s = ST.sections.find(x=>x.id===sid); const n = prompt("Nom :", s.title); if(n) { s.title = n; sync(); } }
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
 function exportData() {
   const code = btoa(JSON.stringify(ST));
-  if(navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(code).then(() => alert("✅ Code copié !")).catch(() => prompt("Copie ce code :", code));
-  } else {
-      prompt("Copie ce code pour sauvegarder :", code);
-  }
+  navigator.clipboard.writeText(code).then(() => alert("✅ Sauvegarde copiée !")).catch(() => prompt("Copie ce code :", code));
 }
-
-function importData() {
-  const code = prompt("Colle ton code de sauvegarde ici :");
-  if (code) { try { ST = JSON.parse(atob(code)); sync(); } catch(e) { alert("Code invalide !"); } }
-}
+function importData() { const c = prompt("Colle ton code :"); if(c) { try { ST = JSON.parse(atob(c)); sync(); } catch(e) { alert("Erreur !"); } } }
 
 render();
 </script>
