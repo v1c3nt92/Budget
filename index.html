@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>📱 MySuperApp - Budget & Compteurs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <title>💰 Mon Budget Mensuel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0f0f13;
@@ -23,11 +23,11 @@
             color: var(--text); 
             font-family: 'Inter', sans-serif; 
             padding: 20px;
-            padding-bottom: 100px;
+            padding-bottom: 110px; /* Plus d'espace en bas pour la barre */
         }
 
-        h1 { font-family: 'Syne', sans-serif; font-size: 1.8rem; margin-bottom: 20px; text-align: center; color: var(--accent); }
-        h2 { font-size: 1.1rem; margin: 20px 0 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        h1 { font-family: 'Syne', sans-serif; font-size: 1.8rem; margin-bottom: 25px; text-align: center; color: var(--accent); }
+        h2 { font-size: 1rem; margin: 25px 0 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-family: 'Syne', sans-serif; font-weight: 800;}
 
         .card {
             background: var(--card);
@@ -40,112 +40,116 @@
             border: 1px solid #2e2e3a;
         }
 
-        .info { display: flex; flex-direction: column; }
-        .label { font-weight: 600; font-size: 1rem; }
+        .info { display: flex; flex-direction: column; gap: 3px; }
+        .icon { font-size: 1.2rem; margin-right: 10px; }
+        .label { font-weight: 600; font-size: 0.95rem; }
         .sub { font-size: 0.8rem; color: var(--text-dim); }
 
         input {
             background: #2e2e3a;
             border: none;
             color: white;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 10px;
             width: 100px;
             text-align: right;
             font-family: 'Inter', sans-serif;
             font-weight: 600;
+            font-size: 0.95rem;
         }
 
         /* Barre d'outils de sauvegarde en bas */
         .toolbar {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(28, 28, 36, 0.95);
+            bottom: 0; left: 0; right: 0;
+            background: rgba(15, 15, 19, 0.98);
             backdrop-filter: blur(10px);
-            padding: 15px;
+            padding: 18px;
             display: flex;
             justify-content: space-around;
             border-top: 1px solid #2e2e3a;
+            z-index: 50;
         }
 
         .btn {
-            padding: 10px 15px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 12px;
             border: none;
             font-weight: 600;
             font-size: 0.8rem;
             cursor: pointer;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .btn-save { background: var(--accent); color: white; }
-        .btn-load { background: #334155; color: white; }
+        .btn-save { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+        .btn-load { background: #334155; color: white; border: 1px solid #4a5568;}
         
+        /* Modal Style - Amélioré */
         .modal {
             display: none;
             position: fixed;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            background: var(--card);
-            padding: 20px;
+            background: #1c1c24;
+            padding: 25px;
             border-radius: 20px;
             width: 90%;
+            max-width: 400px;
             z-index: 100;
             border: 1px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
-        textarea { width: 100%; height: 150px; background: #0f0f13; color: var(--success); border-radius: 10px; padding: 10px; font-family: monospace; font-size: 10px; margin-top: 10px; border: 1px solid #2e2e3a; }
+        .overlay {
+            display: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 99;
+        }
+
+        #modal-title { margin-bottom: 15px; font-weight: 700; color: var(--text); text-align: center; }
+        textarea { width: 100%; height: 180px; background: #0f0f13; color: var(--success); border-radius: 10px; padding: 12px; font-family: monospace; font-size: 11px; margin-top: 10px; border: 1px solid #2e2e3a; resize: none; }
+
+        .modal-btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
+        .modal-btn-close { background: #334155; color: white; }
+        .modal-btn-confirm { background: var(--success); color: white; display: none;} /* Caché par défaut */
     </style>
 </head>
 <body>
 
-    <h1>📱 Mon Manager</h1>
+    <h1>💰 Mon Budget</h1>
 
-    <h2>🏗️ Relevé Compteurs</h2>
-    <div class="card">
-        <div class="info">
-            <span class="label">Bâtiment A - Eau</span>
-            <span class="sub">Dernier : <span id="last-eau">1450</span> m³</span>
-        </div>
-        <input type="number" id="compteur-eau" placeholder="0" oninput="saveData()">
-    </div>
-
-    <div class="card">
-        <div class="info">
-            <span class="label">Bâtiment A - Élec</span>
-            <span class="sub">Dernier : <span id="last-elec">8920</span> kWh</span>
-        </div>
-        <input type="number" id="compteur-elec" placeholder="0" oninput="saveData()">
-    </div>
-
-    <h2>💰 Budget Mensuel</h2>
+    <h2>🏠 Charges Fixes</h2>
     <div class="card">
         <div class="info"><span class="label">🏠 Loyer / Crédit</span></div>
-        <input type="number" id="budget-loyer" placeholder="0" oninput="saveData()">
+        <input type="number" id="budget-loyer" placeholder="0.00" oninput="saveData()">
     </div>
     <div class="card">
         <div class="info"><span class="label">🏛️ Impôts</span></div>
-        <input type="number" id="budget-impots" placeholder="0" oninput="saveData()">
+        <input type="number" id="budget-impots" placeholder="0.00" oninput="saveData()">
     </div>
 
     <div class="toolbar">
-        <button class="btn btn-save" onclick="exportData()">💾 SAUVER<br><span style="font-size: 7px;">(EXPORT)</span></button>
-        <button class="btn btn-load" onclick="showImport()">📥 CHARGER<br><span style="font-size: 7px;">(IMPORT)</span></button>
+        <button class="btn btn-save" onclick="exportData()">💾 SAUVER (EXPORT)</button>
+        <button class="btn btn-load" onclick="showImport()">📥 CHARGER (IMPORT)</button>
     </div>
 
+    <div class="overlay" id="overlay"></div>
     <div id="modal" class="modal">
-        <p id="modal-title" style="font-weight: bold;"></p>
-        <textarea id="data-box"></textarea>
-        <button onclick="closeModal()" style="margin-top:15px; width:100%; padding:10px; border-radius:10px; background:var(--accent); color:white; border:none;">Fermer</button>
+        <p id="modal-title"></p>
+        <textarea id="data-box" readonly onclick="this.select()"></textarea>
+        <div class="modal-btn-group">
+            <button class="modal-btn modal-btn-close" onclick="closeModal()">Fermer</button>
+            <button class="modal-btn modal-btn-confirm" id="modal-btn-confirm">Valider l'import</button>
+        </div>
     </div>
 
     <script>
-        const inputs = ['compteur-eau', 'compteur-elec', 'budget-loyer', 'budget-impots'];
+        const inputs = ['budget-loyer', 'budget-impots']; // Liste de tes catégories
 
         function saveData() {
             inputs.forEach(id => {
@@ -161,45 +165,55 @@
             });
         }
 
+        function openModal(title, data, mode = 'export') {
+            document.getElementById('modal-title').innerText = title;
+            const dataBox = document.getElementById('data-box');
+            dataBox.value = data;
+            
+            const confirmBtn = document.getElementById('modal-btn-confirm');
+            
+            if(mode === 'export') {
+                dataBox.setAttribute('readonly', true);
+                confirmBtn.style.display = 'none';
+            } else {
+                dataBox.removeAttribute('readonly');
+                dataBox.placeholder = "Colle le code ici...";
+                confirmBtn.style.display = 'block';
+                confirmBtn.onclick = function() {
+                    try {
+                        let imported = JSON.parse(dataBox.value);
+                        for (let key in imported) {
+                            if(document.getElementById(key)) {
+                                document.getElementById(key).value = imported[key];
+                            }
+                        }
+                        saveData(); // Sauvegarder dans le localStorage
+                        alert("✅ Données restaurées avec succès !");
+                        closeModal();
+                    } catch(e) { alert("❌ Code invalide ! Assure-toi de copier tout le texte."); }
+                };
+            }
+            
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('modal').style.display = 'block';
+        }
+
         function exportData() {
             let data = {};
             inputs.forEach(id => data[id] = document.getElementById(id).value);
-            document.getElementById('modal-title').innerText = "Copie ce code dans tes Notes :";
-            document.getElementById('data-box').value = JSON.stringify(data);
-            document.getElementById('modal').style.display = 'block';
+            openModal("Copie ce code dans tes Notes :", JSON.stringify(data), 'export');
         }
 
         function showImport() {
-            document.getElementById('modal-title').innerText = "Colle ton code ici :";
-            document.getElementById('data-box').value = "";
-            document.getElementById('data-box').placeholder = "Colle le code JSON ici...";
-            document.getElementById('modal').style.display = 'block';
-            
-            // On ajoute un bouton temporaire pour valider l'import
-            let btn = document.createElement("button");
-            btn.innerText = "VALIDER L'IMPORT";
-            btn.style = "width:100%; background:var(--success); color:white; border:none; padding:10px; border-radius:10px; margin-top:10px;";
-            btn.onclick = function() {
-                try {
-                    let imported = JSON.parse(document.getElementById('data-box').value);
-                    for (let key in imported) {
-                        if(document.getElementById(key)) {
-                            document.getElementById(key).value = imported[key];
-                        }
-                    }
-                    saveData();
-                    alert("Données restaurées !");
-                    closeModal();
-                } catch(e) { alert("Code invalide !"); }
-            };
-            document.getElementById('modal').appendChild(btn);
+            openModal("Colle ton code de sauvegarde :", "", 'import');
         }
 
         function closeModal() {
+            document.getElementById('overlay').style.display = 'none';
             document.getElementById('modal').style.display = 'none';
         }
 
-        window.onload = loadData;
+        window.onload = loadData; // Charger les données au démarrage
     </script>
 </body>
 </html>
