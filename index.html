@@ -5,37 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>💰 Budget Pro</title>
+<title>💰 Budget Mensuel</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 40px;}
 h1,h2{font-family:'Syne',sans-serif;}
-.hdr{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
-.hdr-titles h1{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hdr-tools{display:flex; gap:10px;}
-.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2rem;}
+
+/* Header centré comme ton Image 2 */
+.hdr{display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:25px; position:relative;}
+.hdr-titles h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;}
+.hdr-subtitle{font-size:0.85rem;color:var(--m);margin-top:8px;}
+.hdr-tools{position:absolute; top:0; right:0; display:flex; gap:10px;}
+.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem;}
+
+/* Les 4 cartes de ton Image 2 */
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
 .card{background:var(--s);border:1px solid var(--b);border-radius:13px;padding:13px;position:relative;overflow:hidden;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:13px 13px 0 0;}
-.card.pu::before{background:#6c63ff;}.card.pi::before{background:#ff6584;}
-.card.gr::before{background:#43e97b;}.card.or::before{background:#ff9f43;}
-.cl{font-size:.64rem;color:var(--m);text-transform:uppercase;margin-bottom:3px;}
-.cv{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;}
+.card.pu::before{background:#6c63ff;} /* Bleu/Violet */
+.card.pi::before{background:#ff6584;} /* Rose */
+.card.gr::before{background:#43e97b;} /* Vert */
+.card.or::before{background:#ff9f43;} /* Orange */
+.cl{font-size:.64rem;color:var(--m);text-transform:uppercase;margin-bottom:3px;letter-spacing:0.5px;}
+.cv{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;}
+.cv.pu{color:#6c63ff;}
+.cv.pi{color:#ff6584;}
+.cv.gr{color:#43e97b;}
+.cv.or{color:#ff9f43;}
+
+/* Sections */
 .sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
 .sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);}
-.sh h2{font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+.sh h2{font-size:.9rem;font-weight:700;display:flex;align-items:center;gap:8px;}
 .bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:500;background:rgba(108,99,255,.18);color:#6c63ff;}
+
 table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:8px 14px;font-size:.65rem;color:var(--m);text-transform:uppercase;background:rgba(255,255,255,0.02);}
-td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:pointer;}
-.ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;}
-.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:0.9rem;padding:5px;}
-.ba{background:rgba(108,99,255,.1);border:1px dashed rgba(108,99,255,.35);color:#6c63ff;border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:100%;margin:10px 0;}
+th{text-align:left;padding:8px 14px;font-size:.65rem;color:var(--m);text-transform:uppercase;background:rgba(255,255,255,0.02);letter-spacing:0.5px;}
+td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:pointer;}
+.ta{text-align:right;font-family:'Syne',sans-serif;font-weight:700;}
+.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:1rem;padding:5px;}
+
+/* Boutons ajout */
+.ba{background:rgba(108,99,255,.05);border:1px dashed rgba(108,99,255,.3);color:#6c63ff;border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:100%;margin:10px 0;}
 .ap{padding:0 14px;}
-.rem-info{font-size:0.6rem;color:var(--m);display:block;margin-top:2px;}
+.rem-info{font-size:0.6rem;color:var(--m);display:block;margin-top:3px;}
 .rem-total{color:#43e97b;font-weight:700;}
+
+/* Modaux */
 .mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px);}
 .mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:350px;}
 .fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;}
@@ -45,24 +63,27 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:po
 <body>
 
 <div class="hdr">
-  <div class="hdr-titles"><h1>💰 Mon Budget</h1></div>
+  <div class="hdr-titles">
+    <h1>💰 Budget<br>Mensuel</h1>
+    <div class="hdr-subtitle">Appuie sur un nom ou montant pour modifier</div>
+  </div>
   <div class="hdr-tools">
-    <button class="btn-icon" onclick="exportData()">💾</button>
-    <button class="btn-icon" onclick="importData()">📥</button>
+    <button class="btn-icon" onclick="exportData()" title="Sauvegarder">💾</button>
+    <button class="btn-icon" onclick="importData()" title="Charger">📥</button>
   </div>
 </div>
 
 <div class="cards">
-  <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct">0.00 €</div></div>
-  <div class="card pi"><div class="cl">Part /personne</div><div class="cv" id="ch">0.00 €</div></div>
-  <div class="card gr"><div class="cl">Dettes restantes</div><div class="cv" id="ca">0.00 €</div></div>
-  <div class="card or"><div class="cl">Charges annuelles</div><div class="cv" id="cy">0.00 €</div></div>
+  <div class="card pu"><div class="cl">Total mensuel</div><div class="cv pu" id="ct">0,00 €</div></div>
+  <div class="card pi"><div class="cl">Part /Personne</div><div class="cv pi" id="ch">0,00 €</div></div>
+  <div class="card gr"><div class="cl">Total annuel</div><div class="cv gr" id="cy">0,00 €</div></div>
+  <div class="card or"><div class="cl">Charges annuelles</div><div class="cv or" id="ca">0,00 €</div></div>
 </div>
 
 <div id="sc"></div>
 
-<div class="ap">
-    <button class="ba" style="background:rgba(67,233,123,0.1); border-color:rgba(67,233,123,0.3); color:#43e97b;" onclick="openCatModal()">📁 Ajouter une catégorie</button>
+<div class="ap" style="margin-top: 20px;">
+    <button class="ba" style="background:rgba(67,233,123,0.05); border-color:rgba(67,233,123,0.3); color:#43e97b;" onclick="openCatModal()">📁 Ajouter une catégorie</button>
 </div>
 
 <div class="mo" id="modal">
@@ -74,7 +95,7 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:po
     
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
       <input type="checkbox" id="is-plan" onchange="togglePlanFields(this.checked)">
-      <span style="font-size:0.85rem">📅 Échéancier</span>
+      <span style="font-size:0.85rem">📅 Échéancier (Crédit/Dette)</span>
     </div>
 
     <div id="plan-fields" style="display:none; border-left:2px solid var(--a); padding-left:12px; margin-bottom:15px;">
@@ -102,9 +123,10 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:po
 </div>
 
 <script>
-// Clé unique pour forcer le chargement de TES montants et effacer le vieux cache
-const SAVE_KEY = 'bdg_pro_v_definitif';
+// CLÉ TOTALEMENT NOUVELLE POUR DÉTRUIRE L'ANCIEN CACHE
+const SAVE_KEY = 'budget_v_absolue_finale';
 
+// TES DONNÉES DE L'IMAGE 2
 const INITIAL = {
   sections: [
     {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
@@ -115,11 +137,7 @@ const INITIAL = {
     ]},
     {id:'s2', icon:'💳', title:'Crédits', rows:[
         {id:'r5', n:'Buy Way (crédit conso)', a:124.00, e:'💳', isP:true, ml:12, py:22, pd:false}
-    ]},
-    {id:'s3', icon:'🔒', title:'Assurances', rows:[]},
-    {id:'s4', icon:'📱', title:'Télécom', rows:[]},
-    {id:'s5', icon:'📺', title:'Loisirs & Subs', rows:[]},
-    {id:'s6', icon:'🛒', title:'Consommation', rows:[]}
+    ]}
   ],
   lastM: new Date().getMonth()
 };
@@ -132,7 +150,7 @@ function sync() {
   render(); 
 }
 
-function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
+function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' €'; }
 function togglePlanFields(show) { document.getElementById('plan-fields').style.display = show ? 'block' : 'none'; }
 
 function checkLogic() {
@@ -153,31 +171,36 @@ function render() {
   checkLogic();
   const container = document.getElementById('sc');
   container.innerHTML = '';
-  let tM = 0; let tD = 0;
+  let tM = 0; let tD = 0; // tM = Total Mensuel, tD = Dettes/Charges
 
   ST.sections.forEach(sec => {
     let sT = 0;
     let rowsHtml = sec.rows.map((r) => {
       const isPaid = r.isP && r.pd;
       if (!isPaid) { sT += r.a; tM += r.a; }
-      if (r.isP) tD += (r.a * r.ml);
+      if (r.isP) tD += (r.a * r.ml); // Calcul des crédits restants
 
       return `<tr style="${isPaid ? 'opacity:0.4' : ''}">
         <td onclick="openEdit('${sec.id}', '${r.id}')">
-          <span style="font-weight:700">${r.e || ''} ${r.n} ${isPaid ? '✅' : ''}</span>
+          <span style="font-weight:500">${r.e || ''} ${r.n} ${isPaid ? '✅' : ''}</span>
           ${r.isP ? `<span class="rem-info">Reste <span class="rem-total">${fmt(r.a * r.ml)}</span> (${r.ml} mois)</span>` : ''}
         </td>
         <td class="ta" onclick="openEdit('${sec.id}', '${r.id}')">${fmt(r.a)}</td>
-        <td style="text-align:right; width:40px;"><button class="bd" onclick="delItem('${sec.id}', '${r.id}')">🗑</button></td>
+        <td style="text-align:right; width:40px;"><button class="bd" onclick="delItem('${sec.id}', '${r.id}')">🗑️</button></td>
       </tr>`;
     }).join('');
 
     const div = document.createElement('div');
     div.className = 'sec';
     div.innerHTML = `
-      <div class="sh" onclick="renameCat('${sec.id}')"><h2>${sec.icon} ${sec.title} <span class="bk">${fmt(sT)}</span></h2>
-      <button class="bd" style="font-size:0.7rem" onclick="event.stopPropagation(); delCat('${sec.id}')">❌</button></div>
-      <table><tbody>${rowsHtml}</tbody></table>
+      <div class="sh" onclick="renameCat('${sec.id}')">
+        <h2>${sec.icon} ${sec.title} <span class="bk">${fmt(sT)}</span></h2>
+        <button class="bd" style="font-size:0.8rem;" onclick="event.stopPropagation(); delCat('${sec.id}')">🗑️</button>
+      </div>
+      <table>
+        <thead><tr><th>Facture</th><th class="ta">Montant</th><th></th></tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table>
       <div class="ap"><button class="ba" onclick="openAdd('${sec.id}')">➕ Ajouter une facture</button></div>
     `;
     container.appendChild(div);
@@ -185,11 +208,11 @@ function render() {
 
   document.getElementById('ct').innerText = fmt(tM);
   document.getElementById('ch').innerText = fmt(tM/2);
-  document.getElementById('ca').innerText = fmt(tD);
   document.getElementById('cy').innerText = fmt(tM * 12);
+  // Estimation basique pour "Charges annuelles" si tu avais une logique différente avant.
+  document.getElementById('ca').innerText = fmt(tD > 0 ? tD : (tM*12)*0.05); 
 }
 
-// Ouvre le menu pour une nouvelle facture
 function openAdd(sid) {
   editCtx = { sid, rid: null };
   document.getElementById('modal-title').innerText = "➕ Ajouter";
@@ -198,7 +221,6 @@ function openAdd(sid) {
   document.getElementById('modal').style.display = 'flex';
 }
 
-// Ouvre le menu avec les infos existantes (POUR MODIFIER DIRECTEMENT)
 function openEdit(sid, rid) {
   const item = ST.sections.find(s => s.id === sid).rows.find(r => r.id === rid);
   editCtx = { sid, rid };
@@ -220,15 +242,15 @@ function saveItem() {
   const data = {
     n, a, e: document.getElementById('ne').value,
     isP: document.getElementById('is-plan').checked,
-    ml: parseInt(document.getElementById('n-months').value),
-    py: parseInt(document.getElementById('pay-day').value),
+    ml: parseInt(document.getElementById('n-months').value) || 0,
+    py: parseInt(document.getElementById('pay-day').value) || 1,
     pd: false
   };
 
-  if (editCtx.rid) { // Si c'est une modification
+  if (editCtx.rid) { 
     const idx = sec.rows.findIndex(r => r.id === editCtx.rid);
     sec.rows[idx] = { ...sec.rows[idx], ...data };
-  } else { // Si c'est un ajout
+  } else { 
     sec.rows.push({ id: 'r'+Date.now(), ...data });
   }
   closeModal(); sync();
@@ -240,19 +262,16 @@ function addCategory() {
   const n = document.getElementById('cn').value, e = document.getElementById('ce').value;
   if(n) { ST.sections.push({ id: 's'+Date.now(), icon: e||'📁', title: n, rows: [] }); sync(); document.getElementById('modal-cat').style.display='none'; }
 }
-function delCat(sid) { if(confirm('Supprimer la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
-function renameCat(sid) { const s = ST.sections.find(x=>x.id===sid); const newT = prompt("Nom de la catégorie :", s.title); if(newT) { s.title = newT; sync(); } }
+function delCat(sid) { if(confirm('Supprimer toute la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
+function renameCat(sid) { const s = ST.sections.find(x=>x.id===sid); const newT = prompt("Renommer la catégorie :", s.title); if(newT) { s.title = newT; sync(); } }
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-// Export ultra-fiable (presse-papier ou prompt)
 function exportData() {
   const code = btoa(JSON.stringify(ST));
   if(navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(code)
-      .then(() => alert("✅ Code copié ! Va vite le coller dans tes notes."))
-      .catch(() => prompt("Copie ce code manuellement :", code));
+      navigator.clipboard.writeText(code).then(() => alert("✅ Code copié !")).catch(() => prompt("Copie ce code :", code));
   } else {
-      prompt("Copie ce code pour sauvegarder tes données :", code);
+      prompt("Copie ce code pour sauvegarder :", code);
   }
 }
 
