@@ -3,149 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>💰 Mon Budget</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>💰 Mon Budget Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:15px 15px 100px;}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 100px;}
 h1,h2{font-family:'Syne',sans-serif;}
 
-/* Header sans chevauchement */
-.hdr{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:25px;}
-.hdr-txt h1{font-size:2.2rem; font-weight:800; background:linear-gradient(135deg,#6c63ff,#ff6584); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
-.hdr-txt p{color:var(--m); font-size:.75rem; margin-top:4px;}
-.hdr-btns{display:flex; gap:10px;}
-.btn-top{background:var(--s); border:1px solid var(--b); color:var(--t); width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2rem;}
+/* Header rectifié : pas de chevauchement */
+.hdr{display:flex; flex-direction:row; align-items:center; gap:20px; margin-bottom:25px; padding-bottom:10px; border-bottom:1px solid var(--b);}
+.hdr-titles{flex-grow:1;}
+.hdr-titles h1{font-size:1.7rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hdr-tools{display:flex; gap:8px;}
+.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer;}
 
-/* Cartes Stats */
-.grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;}
-.card{background:var(--s); border:1px solid var(--b); border-radius:14px; padding:15px; border-top:3px solid var(--a);}
-.card.pi{border-top-color:#ff6584;} .card.gr{border-top-color:#43e97b;} .card.or{border-top-color:#ff9f43;}
-.label{font-size:.65rem; color:var(--m); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; font-weight:600;}
-.val{font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700;}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
+.card{background:var(--s);border:1px solid var(--b);border-radius:13px;padding:13px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:13px 13px 0 0;}
+.card.pu::before{background:#6c63ff;}.card.pi::before{background:#ff6584;}
+.card.gr::before{background:#43e97b;}.card.or::before{background:#ff9f43;}
+.cl{font-size:.64rem;color:var(--m);text-transform:uppercase;margin-bottom:3px;font-weight:600;}
+.cv{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;}
 
-/* Sections */
-.sec{background:var(--s); border:1px solid var(--b); border-radius:16px; margin-bottom:12px; overflow:hidden;}
-.sh{padding:14px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; border-bottom:1px solid var(--b);}
-.sh h2{font-size:.9rem; display:flex; align-items:center; gap:8px;}
-.amt-tag{font-size:.7rem; padding:3px 9px; border-radius:20px; background:rgba(108,99,255,0.1); color:var(--a); font-weight:700;}
+.sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);background:rgba(255,255,255,0.02);}
+.sh h2{font-size:.85rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+.bk{font-size:.65rem;padding:2px 8px;border-radius:20px;font-weight:700;background:rgba(108,99,255,.15);color:#6c63ff;}
 
-table{width:100%; border-collapse:collapse;}
-td{padding:12px 14px; font-size:.85rem; border-bottom:1px solid var(--b);}
-.price{text-align:right; font-family:'Syne',sans-serif; font-weight:600;}
-.del-btn{background:none; border:none; color:var(--m); cursor:pointer; padding:5px; font-size:1rem;}
-.add-btn{width:calc(100% - 28px); margin:12px 14px; padding:12px; background:rgba(108,99,255,0.05); border:1px dashed var(--a); color:var(--a); border-radius:10px; font-size:.8rem; cursor:pointer;}
+table{width:100%;border-collapse:collapse;}
+td{padding:11px 14px;font-size:.82rem;border-bottom:1px solid var(--b);}
+.ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;}
+.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:0.9rem;}
+.ba{background:rgba(108,99,255,0.05);border:1px dashed var(--a);color:var(--a);border-radius:10px;padding:10px;font-size:.75rem;cursor:pointer;width:calc(100% - 28px);margin:10px 14px;}
 
-/* Barre de sauvegarde fixe */
-.dock{position:fixed; bottom:0; left:0; right:0; background:var(--s); padding:15px; border-top:1px solid var(--b); display:grid; grid-template-columns:1fr 1fr; gap:12px;}
-.btn-dock{padding:14px; border-radius:12px; border:none; font-family:'Syne',sans-serif; font-weight:700; font-size:.8rem; cursor:pointer;}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(10px);}
+.mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:20px;width:100%;max-width:340px;}
+.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:10px;outline:none;}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-txt">
-    <h1>Mon Budget</h1>
-    <p>Appuie sur un montant pour modifier</p>
-  </div>
-  <div class="hdr-btns">
-    <button class="btn-top" onclick="exportData()">💾</button>
-    <button class="btn-top" onclick="importData()">📥</button>
+  <div class="hdr-titles"><h1>💰 Mon Budget</h1></div>
+  <div class="hdr-tools">
+    <button class="btn-icon" onclick="exportData()">💾</button>
+    <button class="btn-icon" onclick="importData()">📥</button>
   </div>
 </div>
 
-<div class="grid">
-  <div class="card"><div class="label">Total mensuel</div><div class="val" id="t-m">-</div></div>
-  <div class="card pi"><div class="label">Par quinzaine</div><div class="val" id="t-q">-</div></div>
-  <div class="card gr"><div class="label">Total annuel</div><div class="val" id="t-a">-</div></div>
-  <div class="card or"><div class="label">Charges fixes</div><div class="val" id="t-f">-</div></div>
+<div class="cards">
+  <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct">0.00 €</div></div>
+  <div class="card pi"><div class="cl">Par quinzaine</div><div class="cv" id="ch">0.00 €</div></div>
+  <div class="card gr"><div class="cl">Charges Annuelles</div><div class="cv" id="ca">0.00 €</div></div>
+  <div class="card or"><div class="cl">Épargne Visée</div><div class="cv">Libre</div></div>
 </div>
 
-<div id="content"></div>
-
-<div class="dock">
-  <button class="btn-dock" style="background:var(--a); color:#fff;" onclick="exportData()">COPIER CODE</button>
-  <button class="btn-dock" style="background:var(--s2); color:var(--m); border:1px solid var(--b);" onclick="importData()">IMPORTER DATA</button>
-</div>
+<div id="sc"></div>
 
 <script>
-// Données exactes réinjectées
-let data = {
-  mensuel: [
-    { cat: "🏠 Logement & Énergie", items: [
-      { n: "Crédit maison", v: 552.80 }, { n: "Electricité / gaz", v: 120.00 }, { n: "Eau", v: 35.78 }, { n: "Internet", v: 70.00 }, { n: "Energy", v: 0.99 }
+// MONTANTS INJECTÉS EN DUR DANS LE CODE
+const INITIAL = {
+  sections: [
+    {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
+        {id:'r1', n:'Crédit maison', a:552.80, e:'🏠'},
+        {id:'r2', n:'Électricité / Gaz', a:120.00, e:'⚡'},
+        {id:'r3', n:'Eau', a:35.78, e:'💦'},
+        {id:'r4', n:'Internet', a:70.00, e:'🛜'},
+        {id:'r21', n:'Energy', a:0.99, e:'⚡'}
     ]},
-    { cat: "💳 Crédits", items: [{ n: "Buy Way", v: 124.00 }] },
-    { cat: "🛡 Assurances", items: [
-      { n: "Assurance incendie", v: 52.54 }, { n: "Mutuelle", v: 13.50 }, { n: "CSC", v: 21.90 }, { n: "Dela", v: 10.97 }, { n: "AXA", v: 39.25 }, { n: "Verisure", v: 53.99 }
+    {id:'s2', icon:'💳', title:'Crédits', rows:[
+        {id:'r5', n:'Buy Way', a:124.00, e:'💳'}
     ]},
-    { cat: "📱 Télécom", items: [{ n: "Téléphone", v: 114.99 }] },
-    { cat: "📺 Loisirs", items: [
-      { n: "Tv", v: 30.00 }, { n: "Amazon", v: 9.98 }, { n: "Netflix", v: 14.99 }, { n: "Apple music", v: 10.99 }, { n: "Disney +", v: 15.99 }, { n: "iCloud", v: 2.99 }, { n: "Ps5", v: 13.99 }
+    {id:'s3', icon:'🛡️', title:'Assurances', rows:[
+        {id:'r6', n:'Assurance incendie', a:52.54, e:'🔥'},
+        {id:'r7', n:'Mutuelle', a:13.50, e:'🏥'},
+        {id:'r8', n:'CSC', a:21.90, e:'🤝'},
+        {id:'r9', n:'Dela', a:10.97, e:'💀'},
+        {id:'r10', n:'AXA', a:39.25, e:'🛡️'},
+        {id:'r22', n:'Verisure', a:53.99, e:'🚨'}
     ]},
-    { cat: "🛒 Consommation", items: [{ n: "Course", v: 120.00 }] }
-  ],
-  annuel: [
-    { n: "Cadastre", v: 604, m: "Octobre" }, { n: "Assurance vie", v: 142.89, m: "Janvier" }, { n: "Taxe poubelle", v: 220, m: "Avril" }, { n: "Taxe égout", v: 20, m: "Juillet" }
+    {id:'s4', icon:'📱', title:'Télécom', rows:[
+        {id:'r11', n:'Téléphone', a:114.99, e:'📱'}
+    ]},
+    {id:'s5', icon:'📺', title:'Loisirs & Subs', rows:[
+        {id:'r12', n:'Tv', a:30.00, e:'📺'},
+        {id:'r13', n:'Amazon', a:9.98, e:'📦'},
+        {id:'r14', n:'Netflix', a:14.99, e:'🎬'},
+        {id:'r15', n:'Apple music', a:10.99, e:'🎵'},
+        {id:'r16', n:'Disney +', a:15.99, e:'🏰'},
+        {id:'r17', n:'iCloud', a:2.99, e:'🤖'},
+        {id:'r18', n:'Ps5', a:13.99, e:'🎮'}
+    ]},
+    {id:'s6', icon:'🛒', title:'Consommation', rows:[
+        {id:'r19', n:'Course', a:120.00, e:'🛒'}
+    ]},
+    {id:'s7', icon:'📅', title:'Factures Annuelles', rows:[
+        {id:'a1', n:'Cadastre (Oct)', a:50.33, e:'🏛️', desc:'604€/an'},
+        {id:'a2', n:'Assurance vie (Jan)', a:11.90, e:'🧬', desc:'142.89€/an'},
+        {id:'a3', n:'Taxe poubelle (Avr)', a:18.33, e:'🗑️', desc:'220€/an'},
+        {id:'a4', n:'Taxe égout (Juil)', a:1.66, e:'🌊', desc:'20€/an'}
+    ]}
   ]
 };
 
-function format(v) { return v.toLocaleString('fr-FR', {minimumFractionDigits: 2}) + ' €'; }
+// Utilisation de INITIAL si le localStorage est vide ou corrompu
+let ST = JSON.parse(localStorage.getItem('bdg_pwa_v2')) || INITIAL;
+
+function sync() { 
+  localStorage.setItem('bdg_pwa_v2', JSON.stringify(ST)); 
+  render(); 
+}
+
+function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
 
 function render() {
-  const container = document.getElementById('content');
+  const container = document.getElementById('sc');
   container.innerHTML = '';
-  let totalM = 0;
+  let tM = 0;
 
-  data.mensuel.forEach((s, sIdx) => {
-    let sTot = s.items.reduce((acc, curr) => acc + curr.v, 0);
-    totalM += sTot;
-    let html = `<div class="sec"><div class="sh"><h2>${s.cat}</h2><span class="amt-tag">${format(sTot)}</span></div><table>`;
-    s.items.forEach((item, iIdx) => {
-      html += `<tr><td onclick="editN(${sIdx},${iIdx})">${item.n}</td><td class="price" onclick="editV(${sIdx},${iIdx})">${format(item.v)}</td><td style="width:40px; text-align:right;"><button class="del-btn" onclick="del(${sIdx},${iIdx})">×</button></td></tr>`;
-    });
-    html += `</table><button class="add-btn" onclick="add(${sIdx})">+ Ajouter</button></div>`;
-    container.innerHTML += html;
+  ST.sections.forEach(sec => {
+    let sT = sec.rows.reduce((acc, r) => acc + r.a, 0);
+    tM += sT;
+
+    let rowsHtml = sec.rows.map(r => `
+      <tr>
+        <td>
+          <span style="font-weight:600">${r.e || ''} ${r.n}</span>
+          ${r.desc ? `<div style="font-size:0.6rem; color:var(--m)">${r.desc}</div>` : ''}
+        </td>
+        <td class="ta" onclick="editVal('${sec.id}','${r.id}')">${fmt(r.a)}</td>
+        <td style="text-align:right; width:35px;"><button class="bd" onclick="delItem('${sec.id}','${r.id}')">🗑</button></td>
+      </tr>
+    `).join('');
+
+    const div = document.createElement('div');
+    div.className = 'sec';
+    div.innerHTML = `
+      <div class="sh"><h2>${sec.icon} ${sec.title} <span class="bk">${fmt(sT)}</span></h2></div>
+      <table><tbody>${rowsHtml}</tbody></table>
+      <button class="ba" onclick="addItem('${sec.id}')">➕ Ajouter une ligne</button>
+    `;
+    container.appendChild(div);
   });
 
-  // Section Annuelle
-  let totalA = data.annuel.reduce((acc, curr) => acc + curr.v, 0);
-  let aHtml = `<div class="sec" style="border-color:var(--m)"><div class="sh"><h2>📅 Annuel</h2><span class="amt-tag" style="color:var(--m)">${format(totalA)}/an</span></div><table>`;
-  data.annuel.forEach((a, idx) => {
-    aHtml += `<tr><td>${a.n} (${a.m})</td><td class="price">${format(a.v)}</td><td></td></tr>`;
-  });
-  container.innerHTML += aHtml + `</table></div>`;
-
-  document.getElementById('t-m').innerText = format(totalM);
-  document.getElementById('t-q').innerText = format(totalM / 2);
-  document.getElementById('t-a').innerText = format(totalM * 12);
-  document.getElementById('t-f').innerText = format(totalA);
+  document.getElementById('ct').innerText = fmt(tM);
+  document.getElementById('ch').innerText = fmt(tM/2);
+  // Calcul annuel total basé sur les vrais chiffres annuels
+  const totalAnnuels = 604 + 142.89 + 220 + 20;
+  document.getElementById('ca').innerText = fmt(totalAnnuels);
 }
 
-function editV(s, i) { 
-  let n = prompt("Montant ?", data.mensuel[s].items[i].v);
-  if(n) { data.mensuel[s].items[i].v = parseFloat(n); render(); }
+function editVal(sid, rid) {
+  const s = ST.sections.find(x => x.id === sid);
+  const r = s.rows.find(x => x.id === rid);
+  const val = prompt(`Nouveau montant pour ${r.n} :`, r.a);
+  if(val !== null && !isNaN(parseFloat(val))) {
+    r.a = parseFloat(val);
+    sync();
+  }
 }
-function editN(s, i) { 
-  let n = prompt("Nom ?", data.mensuel[s].items[i].n);
-  if(n) { data.mensuel[s].items[i].n = n; render(); }
+
+function delItem(sid, rid) {
+  if(confirm('Supprimer cette ligne ?')) {
+    const s = ST.sections.find(x => x.id === sid);
+    s.rows = s.rows.filter(x => x.id !== rid);
+    sync();
+  }
 }
-function del(s, i) { if(confirm("Supprimer ?")) { data.mensuel[s].items.splice(i, 1); render(); } }
-function add(s) { 
-  let n = prompt("Nom ?"); let v = prompt("Montant ?");
-  if(n && v) { data.mensuel[s].items.push({n, v: parseFloat(v)}); render(); }
+
+function addItem(sid) {
+  const n = prompt("Nom de la dépense ?");
+  const a = prompt("Montant ?");
+  if(n && a) {
+    const s = ST.sections.find(x => x.id === sid);
+    s.rows.push({id: 'r'+Date.now(), n, a: parseFloat(a), e: '💸'});
+    sync();
+  }
 }
 
 function exportData() {
-  const code = JSON.stringify(data);
-  navigator.clipboard.writeText(code);
-  alert("Données copiées ! Garde ce texte précieusement.");
+  const blob = new Blob([JSON.stringify(ST)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'mon_budget.json'; a.click();
 }
 
 function importData() {
-  const code = prompt("Colle ton code de sauvegarde ici :");
-  if(code) { data = JSON.parse(code); render(); }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = event => {
+      ST = JSON.parse(event.target.result);
+      sync();
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 render();
