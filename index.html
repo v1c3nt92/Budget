@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>💰 Budget Pro Officiel</title>
+<title>💰 Budget Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
@@ -102,8 +102,8 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:po
 </div>
 
 <script>
-// On change la clé pour forcer l'affichage de tes vrais montants !
-const SAVE_KEY = 'bdg_pro_v5_final';
+// Clé unique pour forcer le chargement de TES montants et effacer le vieux cache
+const SAVE_KEY = 'bdg_pro_v_definitif';
 
 const INITIAL = {
   sections: [
@@ -189,6 +189,7 @@ function render() {
   document.getElementById('cy').innerText = fmt(tM * 12);
 }
 
+// Ouvre le menu pour une nouvelle facture
 function openAdd(sid) {
   editCtx = { sid, rid: null };
   document.getElementById('modal-title').innerText = "➕ Ajouter";
@@ -197,6 +198,7 @@ function openAdd(sid) {
   document.getElementById('modal').style.display = 'flex';
 }
 
+// Ouvre le menu avec les infos existantes (POUR MODIFIER DIRECTEMENT)
 function openEdit(sid, rid) {
   const item = ST.sections.find(s => s.id === sid).rows.find(r => r.id === rid);
   editCtx = { sid, rid };
@@ -223,30 +225,37 @@ function saveItem() {
     pd: false
   };
 
-  if (editCtx.rid) {
+  if (editCtx.rid) { // Si c'est une modification
     const idx = sec.rows.findIndex(r => r.id === editCtx.rid);
     sec.rows[idx] = { ...sec.rows[idx], ...data };
-  } else {
+  } else { // Si c'est un ajout
     sec.rows.push({ id: 'r'+Date.now(), ...data });
   }
   closeModal(); sync();
 }
 
-function delItem(sid, rid) { if(confirm('Supprimer ?')) { const s = ST.sections.find(x=>x.id===sid); s.rows = s.rows.filter(r=>r.id!==rid); sync(); } }
+function delItem(sid, rid) { if(confirm('Supprimer cette ligne ?')) { const s = ST.sections.find(x=>x.id===sid); s.rows = s.rows.filter(r=>r.id!==rid); sync(); } }
 function openCatModal() { document.getElementById('modal-cat').style.display = 'flex'; }
 function addCategory() {
   const n = document.getElementById('cn').value, e = document.getElementById('ce').value;
   if(n) { ST.sections.push({ id: 's'+Date.now(), icon: e||'📁', title: n, rows: [] }); sync(); document.getElementById('modal-cat').style.display='none'; }
 }
 function delCat(sid) { if(confirm('Supprimer la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
-function renameCat(sid) { const s = ST.sections.find(x=>x.id===sid); const newT = prompt("Nom :", s.title); if(newT) { s.title = newT; sync(); } }
+function renameCat(sid) { const s = ST.sections.find(x=>x.id===sid); const newT = prompt("Nom de la catégorie :", s.title); if(newT) { s.title = newT; sync(); } }
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-// Export ultra-simple (copier/coller)
+// Export ultra-fiable (presse-papier ou prompt)
 function exportData() {
   const code = btoa(JSON.stringify(ST));
-  prompt("Copie ce code pour sauvegarder tes données :", code);
+  if(navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(code)
+      .then(() => alert("✅ Code copié ! Va vite le coller dans tes notes."))
+      .catch(() => prompt("Copie ce code manuellement :", code));
+  } else {
+      prompt("Copie ce code pour sauvegarder tes données :", code);
+  }
 }
+
 function importData() {
   const code = prompt("Colle ton code de sauvegarde ici :");
   if (code) { try { ST = JSON.parse(atob(code)); sync(); } catch(e) { alert("Code invalide !"); } }
