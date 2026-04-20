@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Budget">
 <meta name="theme-color" content="#0f0f13">
-<title>💰 Budget Mensuel</title>
+<title>💰 Budget Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
@@ -87,8 +87,8 @@ tr:last-child td{border-bottom:none;}
 <body>
 <div class="hdr">
   <h1>💰 Budget Mensuel</h1>
-  <p>Appuie sur un nom ou montant pour modifier</p>
-  <span class="saved" id="sv">✅ Sauvegardé</span>
+  <p>Tape sur une valeur pour la modifier</p>
+  <span class="saved" id="sv">✅ Données synchronisées</span>
 </div>
 <div class="cards">
   <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct">—</div></div>
@@ -99,29 +99,29 @@ tr:last-child td{border-bottom:none;}
 <div id="sc"></div>
 <div class="mo" id="modal" style="display:none">
   <div class="mb">
-    <h3>➕ Nouvelle facture</h3>
+    <h3>➕ Nouvel élément</h3>
     <div class="fg"><label class="fl">Catégorie</label><div class="sp" id="sp"></div></div>
     <div class="fr">
       <div class="fg"><label class="fl">Emoji</label><input class="fi" id="ne" placeholder="💡" maxlength="2"></div>
       <div class="fg"><label class="fl">Montant €</label><input class="fi" id="na" type="number" step="0.01" min="0" placeholder="0.00"></div>
     </div>
-    <div class="fg"><label class="fl">Nom</label><input class="fi" id="nn" placeholder="Ex: Salle de sport"></div>
+    <div class="fg"><label class="fl">Nom</label><input class="fi" id="nn" placeholder="Ex: Netflix"></div>
     <div class="tg-row">
       <input type="checkbox" class="tg" id="te" onchange="tED()">
-      <span class="tg-lbl">📅 Date de fin (temporaire)</span>
+      <span class="tg-lbl">📅 Date de fin (optionnel)</span>
     </div>
     <div class="edg" id="edg">
-      <div class="fg"><label class="fl">Mois de fin</label><input class="fi" id="ned" type="month"></div>
+      <div class="fg"><label class="fl">Expire fin de mois</label><input class="fi" id="ned" type="month"></div>
     </div>
     <div class="mbt">
-      <button class="bc" onclick="cM()">Annuler</button>
+      <button class="bc" onclick="cM()">Fermer</button>
       <button class="bco" onclick="confAdd()">Ajouter ✓</button>
     </div>
   </div>
 </div>
 <script>
 const C={pu:'#6c63ff',re:'#ff5050',or:'#ff9f43',cy:'#43d9ff',pi:'#ff6584',gr:'#43e97b'};
-let ctr=200;
+let ctr=Date.now();
 function uid(){return 'x'+(++ctr);}
 const DEF={
   sections:[
@@ -131,31 +131,34 @@ const DEF={
       {id:'r3',e:'💦',n:'Eau',a:35.78,d:null},
       {id:'r4',e:'🛜',n:'Internet',a:70.00,d:null},
     ]},
-    {id:'s2',icon:'💳',title:'Crédits',cl:'re',rows:[
-      {id:'r5',e:'💳',n:'Buy Way (crédit conso)',a:124.00,d:null},
+    {id:'s7',icon:'💸',title:'Impôts & Taxes',cl:'re',rows:[
+      {id:'r22',e:'🧾',n:'Précompte Immobilier',a:65.00,d:null},
+      {id:'r23',e:'🏦',n:'Impôt Revenus (Mensuel)',a:0.00,d:null},
     ]},
-    {id:'s3',icon:'🔒',title:'Assurances & Cotisations',cl:'or',rows:[
+    {id:'s2',icon:'💳',title:'Crédits',cl:'re',rows:[
+      {id:'r5',e:'💳',n:'Buy Way (conso)',a:124.00,d:null},
+    ]},
+    {id:'s3',icon:'🔒',title:'Assurances',cl:'or',rows:[
       {id:'r6',e:'🔥',n:'Assurance incendie',a:52.54,d:null},
       {id:'r7',e:'🏥',n:'Mutuelle',a:13.50,d:null},
       {id:'r8',e:'💀',n:'Dela',a:10.97,d:null},
-      {id:'r9',e:'',n:'AXA',a:39.25,d:null},
+      {id:'r9',e:'🛡',n:'AXA',a:39.25,d:null},
       {id:'r10',e:'🚨',n:'Verisure',a:53.99,d:null},
-      {id:'r11',e:'🤝',n:'CSC (Syndicat)',a:21.90,d:null},
+      {id:'r11',e:'🤝',n:'Syndicat CSC',a:21.90,d:null},
     ]},
     {id:'s4',icon:'📱',title:'Télécom',cl:'cy',rows:[
       {id:'r12',e:'📱',n:'Téléphone',a:114.99,d:null},
     ]},
-    {id:'s5',icon:'📺',title:'Abonnements & Loisirs',cl:'pi',rows:[
+    {id:'s5',icon:'📺',title:'Loisirs & Subs',cl:'pi',rows:[
       {id:'r13',e:'📺',n:'TV',a:30.00,d:null},
       {id:'r14',e:'📦',n:'Amazon',a:9.98,d:null},
-      {id:'r15',e:'',n:'Netflix',a:14.99,d:null},
+      {id:'r15',e:'🎬',n:'Netflix',a:14.99,d:null},
       {id:'r16',e:'🎵',n:'Apple Music',a:10.99,d:null},
-      {id:'r17',e:'',n:'Disney+',a:15.99,d:null},
-      {id:'r18',e:'🤖',n:'iCloud',a:2.99,d:null},
-      {id:'r19',e:'⚡️',n:'Energy',a:0.99,d:null},
-      {id:'r20',e:'🎮',n:'PS5',a:13.99,d:null},
+      {id:'r17',e:'🏰',n:'Disney+',a:15.99,d:null},
+      {id:'r18',e:'☁️',n:'iCloud',a:2.99,d:null},
+      {id:'r20',e:'🎮',n:'PS5 Plus',a:13.99,d:null},
     ]},
-    {id:'s6',icon:'🛒',title:'Courses',cl:'gr',rows:[
+    {id:'s6',icon:'🛒',title:'Consommation',cl:'gr',rows:[
       {id:'r21',e:'🛒',n:'Courses alimentaires',a:120.00,d:null},
     ]},
   ],
@@ -175,7 +178,7 @@ function save(){
   try{ localStorage.setItem('bdg_pwa',JSON.stringify(ST)); const s=document.getElementById('sv'); s.classList.add('show'); clearTimeout(window._t); window._t=setTimeout(()=>s.classList.remove('show'),2000); }catch(e){}
 }
 function fmt(n){ return n.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
-function isExp(d){ if(!d) return false; const [y,m]=d.split('-').map(Number); return new Date(y,m,1)<=new Date(); }
+function isExp(d){ if(!d) return false; const [y,m]=d.split('-').map(Number); const now=new Date(); return new Date(y,m-1,1) < new Date(now.getFullYear(), now.getMonth(), 1); }
 function mLeft(d){ if(!d) return null; const now=new Date(); const [y,m]=d.split('-').map(Number); return (y-now.getFullYear())*12+(m-1-now.getMonth()); }
 function ebHTML(d){
   if(!d) return '';
@@ -247,11 +250,11 @@ function dA(id){ ST.annual=ST.annual.filter(r=>r.id!==id); render(); save(); }
 function addA(){ ST.annual.push({id:uid(),n:'Nouvelle charge',m:'Janvier',a:0}); render(); save(); }
 
 let mSec=null;
-function oM(sid){ mSec=sid; const sp=document.getElementById('sp'); sp.innerHTML=ST.sections.map(s=>`<button class="sb${s.id===sid?' sel':''}" onclick="selS('${s.id}',this)">${s.icon} ${s.title}</button>`).join(''); document.getElementById('nn').value=''; document.getElementById('na').value=''; document.getElementById('ne').value=''; document.getElementById('ned').value=''; document.getElementById('te').checked=false; document.getElementById('edg').classList.remove('vis'); document.getElementById('modal').style.display='flex'; }
+function oM(sid){ mSec=sid; const sp=document.getElementById('sp'); sp.innerHTML=ST.sections.map(s=>`<button class="sb${s.id===sid?' sel':''}" onclick="selS('${s.id}',this)">${s.icon} ${s.title.split(' ')[0]}</button>`).join(''); document.getElementById('nn').value=''; document.getElementById('na').value=''; document.getElementById('ne').value=''; document.getElementById('ned').value=''; document.getElementById('te').checked=false; document.getElementById('edg').classList.remove('vis'); document.getElementById('modal').style.display='flex'; }
 function selS(id,btn){ mSec=id; document.querySelectorAll('.sb').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); }
 function cM(){ document.getElementById('modal').style.display='none'; }
 function tED(){ document.getElementById('edg').classList.toggle('vis',document.getElementById('te').checked); }
-function confAdd(){ const n=document.getElementById('nn').value.trim(); const a=parseFloat(document.getElementById('na').value); const e=document.getElementById('ne').value.trim(); const d=document.getElementById('te').checked?document.getElementById('ned').value:null; if(!n){ alert('Donne un nom 😊'); return; } if(isNaN(a)||a<0){ alert('Montant invalide 😊'); return; } if(!mSec){ alert('Choisis une catégorie 😊'); return; } ST.sections.find(s=>s.id===mSec).rows.push({id:uid(),e,n,a,d:d||null}); cM(); rSec(mSec); updCards(); save(); }
+function confAdd(){ const n=document.getElementById('nn').value.trim(); const a=parseFloat(document.getElementById('na').value); const e=document.getElementById('ne').value.trim(); const d=document.getElementById('te').checked?document.getElementById('ned').value:null; if(!n){ alert('Le nom est vide 😊'); return; } if(isNaN(a)||a<0){ alert('Le montant n\'est pas bon 😊'); return; } if(!mSec){ alert('Choisis une catégorie 😊'); return; } ST.sections.find(s=>s.id===mSec).rows.push({id:uid(),e,n,a,d:d||null}); cM(); rSec(mSec); updCards(); save(); }
 document.getElementById('modal').addEventListener('click',function(e){ if(e.target===this) cM(); });
 render();
 </script>
