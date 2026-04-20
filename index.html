@@ -5,39 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Budget">
-<meta name="theme-color" content="#0f0f13">
 <title>💰 Budget Mensuel</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 100px;}
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:20px 13px 100px;}
 h1,h2{font-family:'Syne',sans-serif;}
 
-/* Header Style Image 2 */
-.hdr{display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:25px;}
-.hdr h1{font-size:2.4rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;}
-.hdr p{color:var(--m);font-size:.8rem;margin-top:8px;}
-.saved{font-size:.7rem;color:#43e97b;margin-top:5px;opacity:0;transition:opacity .4s;}
+/* Header propre avec icônes de côté */
+.hdr-container{display:grid; grid-template-columns:1fr auto; align-items:center; margin-bottom:25px;}
+.hdr-main{text-align:center;}
+.hdr-main h1{font-size:2.3rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;}
+.hdr-main p{color:var(--m);font-size:.75rem;margin-top:5px;}
+.hdr-actions{display:flex; flex-direction:column; gap:8px;}
+.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer;}
+
+.saved{font-size:.7rem;color:#43e97b;text-align:center;display:block;margin-top:10px;opacity:0;transition:opacity .4s;}
 .saved.show{opacity:1;}
 
-/* Cartes Style Image 2 */
+/* Cartes */
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
 .card{background:var(--s);border:1px solid var(--b);border-radius:13px;padding:13px;position:relative;overflow:hidden;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:13px 13px 0 0;}
 .card.pu::before{background:#6c63ff;}.card.pi::before{background:#ff6584;}
 .card.gr::before{background:#43e97b;}.card.or::before{background:#ff9f43;}
 .cl{font-size:.64rem;color:var(--m);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
-.cv{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;}
-.card.pu .cv{color:#6c63ff;}.card.pi .cv{color:#ff6584;}
-.card.gr .cv{color:#43e97b;}.card.or .cv{color:#ff9f43;}
+.cv{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;}
+.card.pu .cv{color:#6c63ff;}.card.pi .cv{color:#ff6584;}.card.gr .cv{color:#43e97b;}.card.or .cv{color:#ff9f43;}
 
-/* Sections */
+/* Sections & Tableaux */
 .sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
 .sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);cursor:pointer;}
-.sh h2{font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:8px;}
-.bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:500;}
+.sh h2{font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:6px;}
+.bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:600;}
 .bk.pu{background:rgba(108,99,255,.15);color:#6c63ff;}
 .bk.re{background:rgba(255,80,80,.15);color:#ff5050;}
 .bk.or{background:rgba(255,159,67,.15);color:#ff9f43;}
@@ -45,42 +46,46 @@ h1,h2{font-family:'Syne',sans-serif;}
 .bk.pi{background:rgba(255,101,132,.15);color:#ff6584;}
 .bk.gr{background:rgba(67,233,123,.15);color:#43e97b;}
 
-.cb{overflow:hidden;transition:max-height .3s ease;}
+.cb{overflow:hidden;}
 table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:8px 14px;font-size:.64rem;color:var(--m);text-transform:uppercase;background:rgba(255,255,255,0.02);}
-td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);vertical-align:middle;}
+th{text-align:left;padding:8px 14px;font-size:.6rem;color:var(--m);text-transform:uppercase;background:rgba(255,255,255,0.02);}
+td{padding:11px 14px;font-size:.85rem;border-bottom:1px solid var(--b);vertical-align:middle;}
 .ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;}
-.bd{background:none;border:none;cursor:pointer;color:var(--m);font-size:1rem;padding:5px;}
+.bd{background:none;border:none;cursor:pointer;color:var(--m);font-size:0.95rem;padding:5px;}
 .ba{background:rgba(108,99,255,.05);border:1px dashed rgba(108,99,255,0.3);color:#6c63ff;border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:100%;margin:10px 0;}
 .ap{padding:0 14px;}
 
-/* Inputs d'édition */
+/* Edition */
 .ei{background:var(--s2);border:1px solid var(--a);color:var(--t);border-radius:6px;padding:4px 8px;font-family:inherit;font-size:0.85rem;outline:none;}
-.ei.am{text-align:right;width:90px;font-family:'Syne',sans-serif;}
-
-/* Barre de sauvegarde */
-.toolbar-save { position: fixed; bottom: 0; left: 0; right: 0; background: var(--s); border-top: 1px solid var(--b); padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; z-index: 90; backdrop-filter: blur(10px); }
-.btn-tool { padding: 12px; border-radius: 12px; border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.btn-save-tool { background: var(--a); color: #fff; box-shadow: 0 4px 15px rgba(108,99,255,0.2); }
-.btn-load-tool { background: var(--s2); color: var(--m); border: 1px solid var(--b); }
+.ei.am{text-align:right;width:85px;font-family:'Syne',sans-serif;}
 
 /* Modaux */
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px);}
-.mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:350px;}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(10px);}
+.mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:340px;}
 .fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;}
 .mbt{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px;}
 .bc{background:var(--s2);border:none;color:var(--m);padding:12px;border-radius:10px;cursor:pointer;}
 .bco{background:var(--a);border:none;color:#fff;padding:12px;border-radius:10px;cursor:pointer;font-weight:700;}
-.data-box { width: 100%; height: 150px; background: #000; color: #43e97b; font-family: monospace; font-size: 0.7rem; border-radius: 10px; padding: 12px; border: 1px solid var(--b); margin: 15px 0; outline: none; }
+.data-box{width:100%;height:150px;background:#000;color:#43e97b;font-family:monospace;font-size:0.7rem;border-radius:10px;padding:10px;margin:15px 0;border:1px solid var(--b);}
+
+.toolbar-save { position: fixed; bottom: 0; left: 0; right: 0; background: var(--s); border-top: 1px solid var(--b); padding: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; z-index: 90;}
+.btn-tool { padding: 12px; border-radius: 12px; border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.75rem; cursor: pointer; text-align: center;}
 </style>
 </head>
 <body>
 
-<div class="hdr">
-  <h1>💰 Budget<br>Mensuel</h1>
-  <p>Appuie sur un montant ou un nom pour modifier</p>
-  <span class="saved" id="sv">✅ Données sauvegardées</span>
+<div class="hdr-container">
+  <div style="width:40px;"></div> <div class="hdr-main">
+    <h1>💰 Budget<br>Mensuel</h1>
+    <p>Appuie sur un montant ou un nom pour modifier</p>
+  </div>
+  <div class="hdr-actions">
+    <button class="btn-icon" onclick="showExport()">💾</button>
+    <button class="btn-icon" onclick="showImport()">📥</button>
+  </div>
 </div>
+
+<span class="saved" id="sv">✅ Données synchronisées</span>
 
 <div class="cards">
   <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct">—</div></div>
@@ -92,17 +97,17 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);vertical-
 <div id="sc"></div>
 
 <div class="toolbar-save">
-  <button class="btn-tool btn-save-tool" onclick="showExport()">💾 EXPORTER</button>
-  <button class="btn-tool btn-load-tool" onclick="showImport()">📥 IMPORTER</button>
+  <button class="btn-tool" style="background:var(--a); color:white;" onclick="showExport()">EXPORTER</button>
+  <button class="btn-tool" style="background:var(--s2); color:var(--m); border:1px solid var(--b);" onclick="showImport()">IMPORTER</button>
 </div>
 
 <div class="mo" id="modal">
   <div class="mb">
-    <h3>➕ Ajouter une facture</h3>
-    <div style="margin-bottom:15px;"><label class="fl">Nom</label><input class="fi" id="nn" placeholder="Ex: Netflix"></div>
-    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:10px; margin-bottom:15px;">
-      <div><label class="fl">Emoji</label><input class="fi" id="ne" placeholder="🎬"></div>
-      <div><label class="fl">Montant €</label><input class="fi" id="na" type="number" step="0.01"></div>
+    <h3>➕ Ajouter</h3>
+    <input class="fi" id="nn" placeholder="Nom (ex: Netflix)">
+    <div style="display:grid; grid-template-columns: 1fr 2fr; gap:10px;">
+      <input class="fi" id="ne" placeholder="Emoji">
+      <input class="fi" id="na" type="number" step="0.01" placeholder="Montant €">
     </div>
     <div class="mbt">
       <button class="bc" onclick="cM()">Annuler</button>
@@ -116,7 +121,7 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);vertical-
     <h3 id="ms-title">Sauvegarde</h3>
     <textarea class="data-box" id="ms-box" spellcheck="false"></textarea>
     <div class="mbt">
-      <button class="bc" onclick="closeMS()">Fermer</button>
+      <button class="bc" onclick="document.getElementById('modal-save').style.display='none'">Fermer</button>
       <button class="bco" id="ms-btn-action" style="display:none">Valider ✓</button>
     </div>
   </div>
@@ -126,7 +131,7 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);vertical-
 let ctr=Date.now();
 function uid(){return 'x'+(++ctr);}
 
-// TES DONNÉES ORIGINALES SONT ICI
+// DONNÉES REPRISES STRICTEMENT DE TON CODE ORIGINAL
 const DEF={
   sections:[
     {id:'s1',icon:'🏠',title:'Logement & Énergie',cl:'pu',rows:[
@@ -176,23 +181,24 @@ const DEF={
 };
 
 let ST;
-try{ const r=localStorage.getItem('bdg_final_pwa'); ST=r?JSON.parse(r):JSON.parse(JSON.stringify(DEF)); }
+try{ const r=localStorage.getItem('bdg_v3'); ST=r?JSON.parse(r):JSON.parse(JSON.stringify(DEF)); }
 catch(e){ ST=JSON.parse(JSON.stringify(DEF)); }
 
 function save(){
-  try{ localStorage.setItem('bdg_final_pwa',JSON.stringify(ST)); const s=document.getElementById('sv'); s.classList.add('show'); setTimeout(()=>s.classList.remove('show'),2000); }catch(e){}
+  localStorage.setItem('bdg_v3',JSON.stringify(ST));
+  const s=document.getElementById('sv'); s.classList.add('show'); setTimeout(()=>s.classList.remove('show'),2000);
 }
 
-function fmt(n){ return n.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €'; }
+function fmt(n){ return n.toLocaleString('fr-FR',{minimumFractionDigits:2})+' €'; }
 function secTot(sec){ return sec.rows.reduce((s,r)=>s+r.a,0); }
 function mTot(){ return ST.sections.reduce((s,sec)=>s+secTot(sec),0); }
 function aTot(){ return ST.annual.reduce((s,r)=>s+r.a,0); }
-function updCards(){ 
-  const mt=mTot(); 
-  document.getElementById('ct').textContent=fmt(mt); 
-  document.getElementById('ch').textContent=fmt(mt/2); 
-  document.getElementById('ca').textContent=fmt(mt*12); 
-  document.getElementById('cy').textContent=fmt(aTot()); 
+
+function updCards(){
+  document.getElementById('ct').textContent=fmt(mTot());
+  document.getElementById('ch').textContent=fmt(mTot()/2);
+  document.getElementById('ca').textContent=fmt(mTot()*12);
+  document.getElementById('cy').textContent=fmt(aTot());
 }
 
 function render(){
@@ -200,32 +206,39 @@ function render(){
   const c=document.getElementById('sc'); c.innerHTML='';
   ST.sections.forEach(sec=>{
     const tot=secTot(sec); const isC=ST.col[sec.id];
-    const div=document.createElement('div'); div.className='sec'; div.id='sec-'+sec.id;
-    const rows=sec.rows.map(r=>{
-      return `<tr><td><span onclick="eN('${sec.id}','${r.id}',this)">${r.e?r.e+' ':''}${r.n}</span></td>
-      <td class="ta"><span onclick="eA('${sec.id}','${r.id}',this)">${fmt(r.a)}</span></td>
-      <td style="width:30px"><button class="bd" onclick="dR('${sec.id}','${r.id}')">🗑</button></td></tr>`; }).join('');
+    const div=document.createElement('div'); div.className='sec';
     div.innerHTML=`<div class="sh" onclick="tS('${sec.id}')"><h2>${sec.icon} ${sec.title} <span class="bk ${sec.cl}">${fmt(tot)}</span></h2><span>▾</span></div>
-    <div class="cb" id="cb-${sec.id}" style="max-height:${isC?'0px':'none'}"><table><thead><tr><th>Facture</th><th class="ta">Montant</th><th></th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="ap"><button class="ba" onclick="oM('${sec.id}')">➕ Ajouter une facture</button></div></div>`;
+    <div class="cb" id="cb-${sec.id}" style="max-height:${isC?'0px':'none'}">
+      <table><thead><tr><th>Facture</th><th class="ta">Montant</th><th></th></tr></thead>
+      <tbody>${sec.rows.map(r=>`<tr>
+        <td><span onclick="eN('${sec.id}','${r.id}',this)">${r.e?r.e+' ':''}${r.n}</span></td>
+        <td class="ta"><span onclick="eA('${sec.id}','${r.id}',this)">${fmt(r.a)}</span></td>
+        <td style="width:35px"><button class="bd" onclick="dR('${sec.id}','${r.id}')">🗑</button></td>
+      </tr>`).join('')}</tbody></table>
+      <div class="ap"><button class="ba" onclick="oM('${sec.id}')">➕ Ajouter une facture</button></div>
+    </div>`;
     c.appendChild(div);
   });
   
   // Section Annuelle
   const aDiv=document.createElement('div'); aDiv.className='sec';
-  const aRows=ST.annual.map(r=>`<tr><td><span onclick="eAN('${r.id}',this)">${r.n}</span></td>
-    <td style="color:var(--m); font-size:.75rem"><span onclick="eAM('${r.id}',this)">${r.m}</span></td>
-    <td class="ta"><span onclick="eAA('${r.id}',this)">${fmt(r.a)}</span></td>
-    <td style="width:30px"><button class="bd" onclick="dA('${r.id}')">🗑</button></td></tr>`).join('');
   aDiv.innerHTML=`<div class="sh" onclick="tS('annual')"><h2>📅 Charges annuelles <span class="bk or">${fmt(aTot())}/an</span></h2><span>▾</span></div>
-  <div class="cb" id="cb-annual" style="max-height:${ST.col['annual']?'0px':'none'}"><table><thead><tr><th>Charge</th><th>Mois</th><th class="ta">Montant</th><th></th></tr></thead><tbody>${aRows}</tbody></table>
-  <div class="ap"><button class="ba" onclick="addA()">➕ Ajouter une charge annuelle</button></div></div>`;
+  <div class="cb" id="cb-annual" style="max-height:${ST.col['annual']?'0px':'none'}">
+    <table><thead><tr><th>Charge</th><th>Mois</th><th class="ta">Montant</th><th></th></tr></thead>
+    <tbody>${ST.annual.map(r=>`<tr>
+      <td><span onclick="eAN('${r.id}',this)">${r.n}</span></td>
+      <td style="color:var(--m); font-size:.7rem"><span onclick="eAM('${r.id}',this)">${r.m}</span></td>
+      <td class="ta"><span onclick="eAA('${r.id}',this)">${fmt(r.a)}</span></td>
+      <td style="width:35px"><button class="bd" onclick="dA('${r.id}')">🗑</button></td>
+    </tr>`).join('')}</tbody></table>
+    <div class="ap"><button class="ba" onclick="addA()">➕ Ajouter une charge annuelle</button></div>
+  </div>`;
   c.appendChild(aDiv);
 }
 
 function tS(id){ const cb=document.getElementById('cb-'+id); const open=cb.style.maxHeight!=='0px'; ST.col[id]=open; cb.style.maxHeight=open?'0px':'none'; save(); }
 
-// Fonctions d'édition
+// Fonctions d'édition directe
 function eN(sid,rid,el){ 
   const r=ST.sections.find(s=>s.id===sid).rows.find(r=>r.id===rid);
   const i=document.createElement('input'); i.className='ei'; i.value=r.n; el.replaceWith(i); i.focus();
@@ -252,15 +265,14 @@ function confAdd(){
   if(n && !isNaN(a)){ ST.sections.find(s=>s.id===mSec).rows.push({id:uid(),e,n,a,d:null}); cM(); render(); save(); }
 }
 
-// Export / Import
 function showExport(){
   const box=document.getElementById('ms-box');
   box.value=JSON.stringify(ST);
-  document.getElementById('ms-title').innerText="Ma Sauvegarde";
+  document.getElementById('ms-title').innerText="Sauvegarde (Copiée)";
   document.getElementById('ms-btn-action').style.display='none';
   document.getElementById('modal-save').style.display='flex';
   box.select();
-  navigator.clipboard.writeText(box.value).then(()=>alert("Copié dans le presse-papier !"));
+  navigator.clipboard.writeText(box.value).then(()=>alert("Code copié !"));
 }
 function showImport(){
   const box=document.getElementById('ms-box');
@@ -269,10 +281,9 @@ function showImport(){
   document.getElementById('ms-btn-action').style.display='block';
   document.getElementById('modal-save').style.display='flex';
   document.getElementById('ms-btn-action').onclick=()=>{
-    try{ const d=JSON.parse(box.value); if(d.sections){ ST=d; render(); save(); closeMS(); } } catch(e){ alert("Erreur de code !"); }
+    try{ const d=JSON.parse(box.value); if(d.sections){ ST=d; render(); save(); document.getElementById('modal-save').style.display='none'; } } catch(e){ alert("Erreur !"); }
   };
 }
-function closeMS(){ document.getElementById('modal-save').style.display='none'; }
 
 render();
 </script>
