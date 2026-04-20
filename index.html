@@ -28,6 +28,7 @@ h1,h2{font-family:'Syne',sans-serif;}
 .sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
 .sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);background:rgba(255,255,255,0.02);}
 .sh h2{font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:8px;}
+.sh-right{display:flex; align-items:center; gap:10px;}
 .bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:700;background:rgba(108,99,255,.18);color:#6c63ff;}
 
 table{width:100%;border-collapse:collapse;}
@@ -58,7 +59,7 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b); cursor:p
   <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct">0.00 €</div></div>
   <div class="card pi"><div class="cl">Par quinzaine</div><div class="cv" id="ch">0.00 €</div></div>
   <div class="card gr"><div class="cl">Total Annuel</div><div class="cv" id="ca">0.00 €</div></div>
-  <div class="card or"><div class="cl">Charges Annuelles</div><div class="cv" id="cy">0.00 €</div></div>
+  <div class="card or"><div class="cl">Total Dettes</div><div class="cv" id="cd">0.00 €</div></div>
 </div>
 
 <div id="sc"></div>
@@ -69,14 +70,14 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b); cursor:p
 
 <div class="mo" id="modal">
   <div class="mb">
-    <h3 id="modal-title" style="margin-bottom:15px; font-family:Syne;">➕ Ajouter</h3>
+    <h3 style="margin-bottom:15px; font-family:Syne;">➕ Ajouter une facture</h3>
     <input class="fi" id="nn" placeholder="Nom de la facture">
     <input class="fi" id="na" type="number" step="0.01" placeholder="Montant €">
     <input class="fi" id="ne" placeholder="Emoji (🏠, 💳...)">
     
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
       <input type="checkbox" id="is-plan" onchange="document.getElementById('plan-fields').style.display = this.checked ? 'block' : 'none'">
-      <span style="font-size:0.85rem">📅 Échéancier (Impôts...)</span>
+      <span style="font-size:0.85rem">📅 Échéancier (Impôts, Crédits...)</span>
     </div>
 
     <div id="plan-fields" style="display:none; border-left:2px solid var(--a); padding-left:12px; margin-bottom:15px;">
@@ -122,18 +123,12 @@ const INITIAL = {
     ]},
     {id:'s4', icon:'🛒', title:'Consommation', rows:[
         {n:'Course', a:120.00, e:'🛒'}
-    ]},
-    {id:'s5', icon:'📅', title:'Taxes Annuelles', rows:[
-        {n:'Cadastre (Oct)', a:604.00, e:'🏛️', isA:true},
-        {n:'Assurance vie (Jan)', a:142.89, e:'🧬', isA:true},
-        {n:'Taxe poubelle (Avr)', a:220.00, e:'🗑️', isA:true},
-        {n:'Taxe égout (Juil)', a:20.00, e:'🌊', isA:true}
     ]}
   ],
   lastCheck: new Date().getMonth()
 };
 
-let ST = JSON.parse(localStorage.getItem('bdg_pwa_v4')) || INITIAL;
+let ST = JSON.parse(localStorage.getItem('bdg_pwa_v5')) || INITIAL;
 let curSid = null;
 
 function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
@@ -161,26 +156,35 @@ function render() {
   logic();
   const container = document.getElementById('sc');
   container.innerHTML = '';
-  let tM = 0; let tA = 0;
+  let tM = 0; let tD = 0;
 
   ST.sections.forEach(sec => {
     let sT = 0;
     let rowsHtml = sec.rows.map((r, idx) => {
-      if(!r.isA) { sT += r.a; tM += r.a; } else { tA += r.a; }
+      tM += r.a;
+      sT += r.a;
+      if(r.isP) tD += (r.a * r.ml);
+
       return `<tr>
         <td onclick="editItem('${sec.id}', ${idx})">
           ${r.isP ? `<span class="rem-info">Reste <span class="rem-total">${fmt(r.a * r.ml)}</span> (${r.ml} mois)</span>` : ''}
           <span style="font-weight:700">${r.e || ''} ${r.n}</span>
         </td>
         <td class="ta" onclick="editItem('${sec.id}', ${idx})">${fmt(r.a)}</td>
-        <td style="text-align:right"><button class="bd" onclick="del('${sec.id}', ${idx})">🗑</button></td>
+        <td style="text-align:right"><button class="bd" onclick="delItem('${sec.id}', ${idx})">🗑</button></td>
       </tr>`;
     }).join('');
 
     const div = document.createElement('div');
     div.className = 'sec';
     div.innerHTML = `
-      <div class="sh"><h2>${sec.icon} ${sec.title} <span class="bk">${sec.id === 's5' ? fmt(tA) : fmt(sT)}</span></h2></div>
+      <div class="sh">
+        <h2>${sec.icon} ${sec.title}</h2>
+        <div class="sh-right">
+            <span class="bk">${fmt(sT)}</span>
+            <button class="bd" onclick="delCategory('${sec.id}')" style="font-size:0.7rem">🗑️</button>
+        </div>
+      </div>
       <table><tbody>${rowsHtml}</tbody></table>
       <div class="ap"><button class="ba" onclick="openModal('${sec.id}')">➕ Ajouter une ligne</button></div>
     `;
@@ -190,8 +194,8 @@ function render() {
   document.getElementById('ct').innerText = fmt(tM);
   document.getElementById('ch').innerText = fmt(tM/2);
   document.getElementById('ca').innerText = fmt(tM * 12);
-  document.getElementById('cy').innerText = fmt(tA);
-  localStorage.setItem('bdg_pwa_v4', JSON.stringify(ST));
+  document.getElementById('cd').innerText = fmt(tD);
+  localStorage.setItem('bdg_pwa_v5', JSON.stringify(ST));
 }
 
 function openModal(sid) { curSid = sid; document.getElementById('modal').style.display = 'flex'; }
@@ -208,38 +212,46 @@ function saveItem() {
       pd: p ? parseInt(document.getElementById('pay-day').value) : 0
     });
     render(); closeModal();
+    document.getElementById('nn').value = ''; document.getElementById('na').value = '';
   }
 }
 
 function editItem(sid, idx) {
   const r = ST.sections.find(s => s.id === sid).rows[idx];
-  const newN = prompt("Nom :", r.n);
-  const newA = prompt("Montant :", r.a);
-  if(newN) r.n = newN;
-  if(newA) r.a = parseFloat(newA);
+  const newN = prompt("Modifier le nom :", r.n);
+  if(newN !== null) r.n = newN;
+  const newA = prompt("Modifier le montant (€) :", r.a);
+  if(newA !== null && !isNaN(parseFloat(newA))) r.a = parseFloat(newA);
   render();
 }
 
 function addCategory() {
-    const t = prompt("Nom de la catégorie ?");
+    const t = prompt("Nom de la nouvelle catégorie ?");
     if(t) { ST.sections.push({id: 's'+Date.now(), icon: '📁', title: t, rows: []}); render(); }
 }
 
-function del(sid, i) { if(confirm('Supprimer ?')) { ST.sections.find(s => s.id === sid).rows.splice(i, 1); render(); } }
+function delCategory(sid) {
+    if(confirm('Supprimer toute cette catégorie ?')) {
+        ST.sections = ST.sections.filter(s => s.id !== sid);
+        render();
+    }
+}
+
+function delItem(sid, i) { if(confirm('Supprimer cette ligne ?')) { ST.sections.find(s => s.id === sid).rows.splice(i, 1); render(); } }
 
 async function copyCode() {
   const code = btoa(JSON.stringify(ST));
   try {
     await navigator.clipboard.writeText(code);
-    alert("Code copié dans le presse-papier ! Garde-le précieusement.");
+    alert("Code copié !");
   } catch (err) {
-    prompt("Copie manuellement ce code :", code);
+    prompt("Copie ce code :", code);
   }
 }
 
 function showImport() { 
-  let c = prompt("Colle ton code de sauvegarde ici :"); 
-  if(c) { try { ST = JSON.parse(atob(c)); render(); } catch(e) { alert("Erreur de code !"); } } 
+  let c = prompt("Colle ton code ici :"); 
+  if(c) { try { ST = JSON.parse(atob(c)); render(); } catch(e) { alert("Erreur !"); } } 
 }
 
 render();
