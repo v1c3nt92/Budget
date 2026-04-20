@@ -12,7 +12,7 @@
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 100px;} /* Padding bas augmenté pour la barre */
+body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 100px;} /* Padding bas pour la barre */
 h1,h2{font-family:'Syne',sans-serif;}
 .hdr{text-align:center;margin-bottom:20px;}
 .hdr h1{font-size:1.9rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -83,15 +83,14 @@ tr:last-child td{border-bottom:none;}
 .bc{background:var(--s2);border:1px solid var(--b);color:var(--m);border-radius:9px;padding:10px;font-size:.86rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
 .bco{background:var(--a);border:none;color:#fff;border-radius:9px;padding:10px;font-size:.86rem;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;}
 
-/* --- Nouveaux Styles de Sauvegarde --- */
-.toolbar-save { position: fixed; bottom: 0; left: 0; right: 0; background: var(--s); border-top: 1px solid var(--b); padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; z-index: 90; }
-.btn-tool { padding: 10px; border-radius: 10px; border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.btn-save-tool { background: var(--a); color: #fff; }
+/* Nouveaux Styles Sauvegarde intégrés */
+.toolbar-save { position: fixed; bottom: 0; left: 0; right: 0; background: var(--s); border-top: 1px solid var(--b); padding: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; z-index: 90; }
+.btn-tool { padding: 12px; border-radius: 12px; border: none; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.7rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+.btn-save-tool { background: var(--a); color: #fff; box-shadow: 0 4px 15px rgba(108,99,255,0.3); }
 .btn-load-tool { background: var(--s2); color: var(--m); border: 1px solid var(--b); }
-.modal-save { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 110; display: none; align-items: center; justify-content: center; padding: 20px; }
-.modal-save-content { background: var(--s); border-radius: 20px; padding: 20px; width: 100%; max-width: 400px; }
-.modal-save-content h4 { font-family: 'Syne', sans-serif; margin-bottom: 15px; }
-.data-box { width: 100%; height: 150px; background: #000; color: #43e97b; font-family: monospace; font-size: 0.7rem; border-radius: 10px; padding: 10px; border: 1px solid var(--b); margin-bottom: 15px; }
+.modal-save { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 110; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+.modal-save-content { background: var(--s); border: 1px solid var(--b); border-radius: 20px; padding: 20px; width: 100%; max-width: 360px; }
+.data-box { width: 100%; height: 160px; background: #000; color: #43e97b; font-family: monospace; font-size: 0.65rem; border-radius: 10px; padding: 12px; border: 1px solid var(--b); margin: 15px 0; outline: none; }
 </style>
 </head>
 <body>
@@ -115,9 +114,9 @@ tr:last-child td{border-bottom:none;}
 
 <div class="modal-save" id="modal-save">
   <div class="modal-save-content">
-    <h4 id="ms-title">Sauvegarde</h4>
-    <textarea class="data-box" id="ms-box" readonly onclick="this.select()"></textarea>
-    <div class="mbt" id="ms-btns">
+    <h3 id="ms-title" style="font-family:'Syne';">Sauvegarde</h3>
+    <textarea class="data-box" id="ms-box" spellcheck="false" onclick="this.select()"></textarea>
+    <div class="mbt">
       <button class="bc" onclick="closeMS()">Fermer</button>
       <button class="bco" id="ms-btn-action" style="display:none">Valider ✓</button>
     </div>
@@ -146,6 +145,7 @@ tr:last-child td{border-bottom:none;}
     </div>
   </div>
 </div>
+
 <script>
 const C={pu:'#6c63ff',re:'#ff5050',or:'#ff9f43',cy:'#43d9ff',pi:'#ff6584',gr:'#43e97b'};
 let ctr=Date.now();
@@ -205,9 +205,9 @@ function save(){
   try{ localStorage.setItem('bdg_pwa',JSON.stringify(ST)); const s=document.getElementById('sv'); s.classList.add('show'); clearTimeout(window._t); window._t=setTimeout(()=>s.classList.remove('show'),2000); }catch(e){}
 }
 
-/* Fonctions de Sauvegarde Externes */
+/* LOGIQUE SAUVEGARDE */
 function showExport(){
-  document.getElementById('ms-title').innerText = "Ma Sauvegarde (Copie ce code)";
+  document.getElementById('ms-title').innerText = "Ma Sauvegarde";
   const box = document.getElementById('ms-box');
   box.value = JSON.stringify(ST);
   box.readOnly = true;
@@ -215,7 +215,7 @@ function showExport(){
   document.getElementById('modal-save').style.display = 'flex';
 }
 function showImport(){
-  document.getElementById('ms-title').innerText = "Importer une sauvegarde";
+  document.getElementById('ms-title').innerText = "Importer des données";
   const box = document.getElementById('ms-box');
   box.value = "";
   box.readOnly = false;
@@ -225,8 +225,8 @@ function showImport(){
   btn.onclick = function(){
     try {
       const data = JSON.parse(box.value);
-      if(data.sections) { ST = data; save(); render(); closeMS(); alert("Données importées !"); }
-    } catch(e){ alert("Code invalide !"); }
+      if(data.sections) { ST = data; save(); render(); closeMS(); alert("✅ Import réussi !"); }
+    } catch(e){ alert("❌ Code invalide."); }
   };
   document.getElementById('modal-save').style.display = 'flex';
 }
