@@ -12,14 +12,10 @@
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 40px;}
 h1,h2{font-family:'Syne',sans-serif;}
-
-/* Header avec tes disquettes */
 .hdr{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
 .hdr-titles h1{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hdr-tools{display:flex; gap:10px;}
 .btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2rem;}
-
-/* Les 4 cartes du haut */
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
 .card{background:var(--s);border:1px solid var(--b);border-radius:13px;padding:13px;position:relative;overflow:hidden;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:13px 13px 0 0;}
@@ -27,30 +23,23 @@ h1,h2{font-family:'Syne',sans-serif;}
 .card.gr::before{background:#43e97b;}.card.or::before{background:#ff9f43;}
 .cl{font-size:.64rem;color:var(--m);text-transform:uppercase;margin-bottom:3px;}
 .cv{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;}
-
-/* Sections et Tableaux */
 .sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
 .sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);}
 .sh h2{font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:8px;}
 .bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:500;background:rgba(108,99,255,.18);color:#6c63ff;}
-
 table{width:100%;border-collapse:collapse;}
 th{text-align:left;padding:8px 14px;font-size:.65rem;color:var(--m);text-transform:uppercase;background:rgba(255,255,255,0.02);}
-td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
+td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:pointer;}
 .ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;}
-.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:0.9rem;}
-
+.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:0.9rem;padding:5px;}
 .ba{background:rgba(108,99,255,.1);border:1px dashed rgba(108,99,255,.35);color:#6c63ff;border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:100%;margin:10px 0;}
 .ap{padding:0 14px;}
-
-/* Échéancier style */
 .rem-info{font-size:0.6rem;color:var(--m);display:block;margin-top:2px;}
 .rem-total{color:#43e97b;font-weight:700;}
-
-/* Modaux */
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(4px);}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px);}
 .mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:350px;}
 .fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;}
+.btn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 </style>
 </head>
 <body>
@@ -58,8 +47,8 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
 <div class="hdr">
   <div class="hdr-titles"><h1>💰 Mon Budget</h1></div>
   <div class="hdr-tools">
-    <button class="btn-icon" title="Exporter" onclick="showExport()">💾</button>
-    <button class="btn-icon" title="Importer" onclick="showImport()">📥</button>
+    <button class="btn-icon" onclick="exportData()">💾</button>
+    <button class="btn-icon" onclick="importData()">📥</button>
   </div>
 </div>
 
@@ -72,15 +61,19 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
 
 <div id="sc"></div>
 
+<div class="ap">
+    <button class="ba" style="background:rgba(67,233,123,0.1); border-color:rgba(67,233,123,0.3); color:#43e97b;" onclick="openCatModal()">📁 Ajouter une catégorie</button>
+</div>
+
 <div class="mo" id="modal">
   <div class="mb">
-    <h3 style="margin-bottom:15px; font-family:Syne;">➕ Ajouter</h3>
+    <h3 id="modal-title" style="margin-bottom:15px; font-family:Syne;">➕ Ajouter</h3>
     <input class="fi" id="nn" placeholder="Nom de la facture">
     <input class="fi" id="na" type="number" step="0.01" placeholder="Montant €">
     <input class="fi" id="ne" placeholder="Emoji (🏠, 💳...)">
     
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-      <input type="checkbox" id="is-plan" onchange="document.getElementById('plan-fields').style.display = this.checked ? 'block' : 'none'">
+      <input type="checkbox" id="is-plan" onchange="togglePlanFields(this.checked)">
       <span style="font-size:0.85rem">📅 Échéancier</span>
     </div>
 
@@ -89,25 +82,36 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
       <input class="fi" id="pay-day" type="number" placeholder="Jour prélèvement" value="22">
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-      <button class="fi" style="background:var(--s2); border:none; color:var(--m)" onclick="cM()">Annuler</button>
-      <button class="fi" style="background:var(--a); border:none; color:white; font-weight:bold;" onclick="confAdd()">Valider ✓</button>
+    <div class="btn-grid">
+      <button class="fi" style="background:var(--s2); border:none; color:var(--m)" onclick="closeModal()">Annuler</button>
+      <button class="fi" style="background:var(--a); border:none; color:white; font-weight:bold;" onclick="saveItem()">Valider ✓</button>
+    </div>
+  </div>
+</div>
+
+<div class="mo" id="modal-cat">
+  <div class="mb">
+    <h3 style="margin-bottom:15px; font-family:Syne;">📁 Nouvelle Catégorie</h3>
+    <input class="fi" id="cn" placeholder="Nom (ex: Voiture)">
+    <input class="fi" id="ce" placeholder="Emoji (ex: 🚗)">
+    <div class="btn-grid">
+      <button class="fi" style="background:var(--s2); border:none; color:var(--m)" onclick="document.getElementById('modal-cat').style.display='none'">Annuler</button>
+      <button class="fi" style="background:#43e97b; border:none; color:black; font-weight:bold;" onclick="addCategory()">Créer ✓</button>
     </div>
   </div>
 </div>
 
 <script>
-// DONNÉES RESTAURÉES DE TES IMAGES
 const INITIAL = {
   sections: [
     {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
-        {n:'Crédit maison', a:552.80, e:'🏠', isP:false},
-        {n:'Électricité / Gaz', a:120.00, e:'⚡', isP:false},
-        {n:'Eau', a:35.78, e:'💦', isP:false},
-        {n:'Internet', a:70.00, e:'🌐', isP:false}
+        {id:'r1', n:'Crédit maison', a:552.80, e:'🏠', isP:false},
+        {id:'r2', n:'Électricité / Gaz', a:120.00, e:'⚡', isP:false},
+        {id:'r3', n:'Eau', a:35.78, e:'💦', isP:false},
+        {id:'r4', n:'Internet', a:70.00, e:'🌐', isP:false}
     ]},
     {id:'s2', icon:'💳', title:'Crédits', rows:[
-        {n:'Buy Way (crédit conso)', a:124.00, e:'💳', isP:true, ml:12, py:22, pd:false}
+        {id:'r5', n:'Buy Way (crédit conso)', a:124.00, e:'💳', isP:true, ml:12, py:22, pd:false}
     ]},
     {id:'s3', icon:'🔒', title:'Assurances', rows:[]},
     {id:'s4', icon:'📱', title:'Télécom', rows:[]},
@@ -118,32 +122,18 @@ const INITIAL = {
 };
 
 let ST = JSON.parse(localStorage.getItem('bdg_pwa')) || INITIAL;
+let editCtx = null; // {sid, rid}
 
-function save() { 
+function sync() { 
   localStorage.setItem('bdg_pwa', JSON.stringify(ST)); 
-  render();
+  render(); 
 }
 
 function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
 
-function checkLogic() {
-  const now = new Date();
-  const m = now.getMonth();
-  const d = now.getDate();
-  ST.sections.forEach(sec => {
-    sec.rows.forEach(r => {
-      if (r.isP) {
-        if (ST.lastM !== m) r.pd = false;
-        if (d >= r.py && !r.pd) { r.ml -= 1; r.pd = true; }
-      }
-    });
-    sec.rows = sec.rows.filter(r => !r.isP || r.ml > 0);
-  });
-  ST.lastM = m;
-}
+function togglePlanFields(show) { document.getElementById('plan-fields').style.display = show ? 'block' : 'none'; }
 
 function render() {
-  checkLogic();
   const container = document.getElementById('sc');
   container.innerHTML = '';
   let tM = 0; let tD = 0;
@@ -156,24 +146,22 @@ function render() {
       if (r.isP) tD += (r.a * r.ml);
 
       return `<tr style="${isPaid ? 'opacity:0.4' : ''}">
-        <td>
+        <td onclick="openEdit('${sec.id}', '${r.id}')">
           <span style="font-weight:700">${r.e || ''} ${r.n} ${isPaid ? '✅' : ''}</span>
           ${r.isP ? `<span class="rem-info">Reste <span class="rem-total">${fmt(r.a * r.ml)}</span> (${r.ml} mois)</span>` : ''}
         </td>
-        <td class="ta">${fmt(r.a)}</td>
-        <td style="text-align:right"><button class="bd" onclick="del('${sec.id}', ${idx})">🗑</button></td>
+        <td class="ta" onclick="openEdit('${sec.id}', '${r.id}')">${fmt(r.a)}</td>
+        <td style="text-align:right; width:40px;"><button class="bd" onclick="delItem('${sec.id}', '${r.id}')">🗑</button></td>
       </tr>`;
     }).join('');
 
     const div = document.createElement('div');
     div.className = 'sec';
     div.innerHTML = `
-      <div class="sh"><h2>${sec.icon} ${sec.title} <span class="bk">${fmt(sT)}</span></h2></div>
-      <table>
-        <thead><tr><th>Facture</th><th class="ta">Montant</th><th></th></tr></thead>
-        <tbody>${rowsHtml}</tbody>
-      </table>
-      <div class="ap"><button class="ba" onclick="oM('${sec.id}')">➕ Ajouter une facture</button></div>
+      <div class="sh" onclick="renameCat('${sec.id}')"><h2>${sec.icon} ${sec.title} <span class="bk">${fmt(sT)}</span></h2>
+      <button class="bd" style="font-size:0.7rem" onclick="event.stopPropagation(); delCat('${sec.id}')">❌</button></div>
+      <table><tbody>${rowsHtml}</tbody></table>
+      <div class="ap"><button class="ba" onclick="openAdd('${sec.id}')">➕ Ajouter une facture</button></div>
     `;
     container.appendChild(div);
   });
@@ -184,38 +172,79 @@ function render() {
   document.getElementById('cy').innerText = fmt(tM * 12);
 }
 
-let curS = null;
-function oM(sid) { curS = sid; document.getElementById('modal').style.display = 'flex'; }
-function cM() { document.getElementById('modal').style.display = 'none'; }
-
-function confAdd() {
-  const n = document.getElementById('nn').value;
-  const a = parseFloat(document.getElementById('na').value);
-  const e = document.getElementById('ne').value;
-  const p = document.getElementById('is-plan').checked;
-  if (n && a) {
-    ST.sections.find(s => s.id === curS).rows.push({
-      n, a, e, isP: p,
-      ml: p ? parseInt(document.getElementById('n-months').value) : 0,
-      py: p ? parseInt(document.getElementById('pay-day').value) : 22,
-      pd: false
-    });
-    save(); cM();
-    document.getElementById('nn').value = ''; document.getElementById('na').value = '';
-  }
+// GESTION ITEMS
+function openAdd(sid) {
+  editCtx = { sid, rid: null };
+  document.getElementById('modal-title').innerText = "➕ Ajouter";
+  document.getElementById('nn').value = ''; document.getElementById('na').value = ''; document.getElementById('ne').value = '';
+  document.getElementById('is-plan').checked = false;
+  togglePlanFields(false);
+  document.getElementById('modal').style.display = 'flex';
 }
 
-function del(sid, i) {
-  if (confirm('Supprimer ?')) {
-    ST.sections.find(s => s.id === sid).rows.splice(i, 1);
-    save();
-  }
+function openEdit(sid, rid) {
+  const item = ST.sections.find(s => s.id === sid).rows.find(r => r.id === rid);
+  editCtx = { sid, rid };
+  document.getElementById('modal-title').innerText = "✏️ Modifier";
+  document.getElementById('nn').value = item.n;
+  document.getElementById('na').value = item.a;
+  document.getElementById('ne').value = item.e || '';
+  document.getElementById('is-plan').checked = item.isP;
+  document.getElementById('n-months').value = item.ml || 12;
+  document.getElementById('pay-day').value = item.py || 22;
+  togglePlanFields(item.isP);
+  document.getElementById('modal').style.display = 'flex';
 }
 
-function showExport() { prompt("Copie ce code :", btoa(JSON.stringify(ST))); }
-function showImport() { 
-  let code = prompt("Colle ton code :"); 
-  if(code) { try { ST = JSON.parse(atob(code)); save(); } catch(e) { alert("Erreur !"); } }
+function saveItem() {
+  const n = document.getElementById('nn').value, a = parseFloat(document.getElementById('na').value);
+  if (!n || isNaN(a)) return;
+  const sec = ST.sections.find(s => s.id === editCtx.sid);
+  const data = {
+    n, a, e: document.getElementById('ne').value,
+    isP: document.getElementById('is-plan').checked,
+    ml: parseInt(document.getElementById('n-months').value),
+    py: parseInt(document.getElementById('pay-day').value),
+    pd: false
+  };
+
+  if (editCtx.rid) {
+    const idx = sec.rows.findIndex(r => r.id === editCtx.rid);
+    sec.rows[idx] = { ...sec.rows[idx], ...data };
+  } else {
+    sec.rows.push({ id: 'r'+Date.now(), ...data });
+  }
+  closeModal(); sync();
+}
+
+function delItem(sid, rid) { if(confirm('Supprimer ?')) { const s = ST.sections.find(x=>x.id===sid); s.rows = s.rows.filter(r=>r.id!==rid); sync(); } }
+
+// GESTION CATÉGORIES
+function openCatModal() { document.getElementById('modal-cat').style.display = 'flex'; }
+function addCategory() {
+  const n = document.getElementById('cn').value, e = document.getElementById('ce').value;
+  if(n) { ST.sections.push({ id: 's'+Date.now(), icon: e||'📁', title: n, rows: [] }); sync(); document.getElementById('modal-cat').style.display='none'; }
+}
+function delCat(sid) { if(confirm('Supprimer toute la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
+function renameCat(sid) { 
+    const s = ST.sections.find(x=>x.id===sid);
+    const newT = prompt("Nouveau nom :", s.title);
+    if(newT) { s.title = newT; sync(); }
+}
+
+function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+// IMPORT / EXPORT FIXE
+function exportData() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST));
+  const dl = document.createElement('a');
+  dl.setAttribute("href", dataStr);
+  dl.setAttribute("download", "budget_backup.json");
+  dl.click();
+}
+function importData() {
+  const code = prompt("Colle ton code de sauvegarde ici :");
+  if (code) { try { ST = JSON.parse(atob(code)); sync(); } catch(e) { alert("Erreur de format !"); } }
 }
 
 render();
