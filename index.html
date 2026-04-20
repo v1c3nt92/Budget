@@ -97,32 +97,37 @@ const INITIAL = {
   sections: [
     {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
         {n:'Crédit maison', a:552.80, e:'🏠'},
-        {n:'Électricité / Gaz', a:120.00, e:'⚡'},
-        {n:'Eau', a:35.78, e:'💦'},
-        {n:'Internet', a:70.00, e:'🛜'},
+        {n:'Électricité / Gaz', a:145.69, e:'⚡'},
+        {n:'Eau', a:40.97, e:'💦'},
+        {n:'Internet', a:67.00, e:'🛜'},
         {n:'Energy', a:0.99, e:'⚡'}
     ]},
     {id:'s2', icon:'💳', title:'Crédits & Assurances', rows:[
         {n:'Buy Way', a:124.00, e:'💳'},
-        {n:'Assurance incendie', a:52.54, e:'🔥'},
+        {n:'Assurance incendie', a:52.50, e:'🔥'},
         {n:'Mutuelle', a:13.50, e:'🏥'},
-        {n:'CSC', a:21.90, e:'🤝'},
-        {n:'Dela', a:10.97, e:'💀'},
+        {n:'CSC', a:22.52, e:'🤝'},
+        {n:'Dela', a:11.35, e:'💀'},
         {n:'AXA', a:39.25, e:'🛡️'},
-        {n:'Verisure', a:53.99, e:'🚨'}
+        {n:'Verisure', a:55.87, e:'🚨'}
     ]},
     {id:'s3', icon:'📱', title:'Télécom & Loisirs', rows:[
         {n:'Téléphone', a:114.99, e:'📱'},
         {n:'Tv', a:30.00, e:'📺'},
         {n:'Amazon', a:9.98, e:'📦'},
-        {n:'Netflix', a:14.99, e:'🎬'},
+        {n:'Netflix', a:21.99, e:'🎬'},
         {n:'Apple music', a:10.99, e:'🎵'},
         {n:'Disney +', a:15.99, e:'🏰'},
         {n:'iCloud', a:2.99, e:'🤖'},
-        {n:'Ps5', a:13.99, e:'🎮'}
+        {n:'Ps5', a:13.99, e:'🎮'},
+        {n:'Nabu casa', a:8.11, e:'📟'}
     ]},
     {id:'s4', icon:'🛒', title:'Consommation', rows:[
         {n:'Course', a:120.00, e:'🛒'}
+    ]},
+    {id:'s5', icon:'📁', title:'Impôt & taxe', rows:[
+        {n:'Contribution', a:103.32, e:'🏛️', isP:true, ml:4, pd:22},
+        {n:'Cadastre', a:35.34, e:'🏠', isP:true, ml:2, pd:22}
     ]}
   ],
   lastCheck: new Date().getMonth()
@@ -239,19 +244,26 @@ function delCategory(sid) {
 
 function delItem(sid, i) { if(confirm('Supprimer cette ligne ?')) { ST.sections.find(s => s.id === sid).rows.splice(i, 1); render(); } }
 
-async function copyCode() {
+function copyCode() {
   const code = btoa(JSON.stringify(ST));
+  // Tentative de copie automatique
+  const el = document.createElement('textarea');
+  el.value = code;
+  document.body.appendChild(el);
+  el.select();
   try {
-    await navigator.clipboard.writeText(code);
-    alert("Code copié !");
+    document.execCommand('copy');
+    alert("Code copié avec succès !");
   } catch (err) {
-    prompt("Copie ce code :", code);
+    // Si ça rate sur mobile, on affiche le code dans un prompt
+    prompt("Le copier automatique a échoué. Copie ce code manuellement :", code);
   }
+  document.body.removeChild(el);
 }
 
 function showImport() { 
   let c = prompt("Colle ton code ici :"); 
-  if(c) { try { ST = JSON.parse(atob(c)); render(); } catch(e) { alert("Erreur !"); } } 
+  if(c) { try { ST = JSON.parse(atob(c)); render(); } catch(e) { alert("Erreur de code !"); } } 
 }
 
 render();
