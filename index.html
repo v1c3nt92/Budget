@@ -102,6 +102,9 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);cursor:po
 </div>
 
 <script>
+// On change la clé pour forcer l'affichage de tes vrais montants !
+const SAVE_KEY = 'bdg_pro_v5_final';
+
 const INITIAL = {
   sections: [
     {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
@@ -121,26 +124,40 @@ const INITIAL = {
   lastM: new Date().getMonth()
 };
 
-let ST = JSON.parse(localStorage.getItem('bdg_pwa')) || INITIAL;
-let editCtx = null; // {sid, rid}
+let ST = JSON.parse(localStorage.getItem(SAVE_KEY)) || INITIAL;
+let editCtx = null;
 
 function sync() { 
-  localStorage.setItem('bdg_pwa', JSON.stringify(ST)); 
+  localStorage.setItem(SAVE_KEY, JSON.stringify(ST)); 
   render(); 
 }
 
 function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
-
 function togglePlanFields(show) { document.getElementById('plan-fields').style.display = show ? 'block' : 'none'; }
 
+function checkLogic() {
+  const now = new Date(); const m = now.getMonth(); const d = now.getDate();
+  ST.sections.forEach(sec => {
+    sec.rows.forEach(r => {
+      if (r.isP) {
+        if (ST.lastM !== m) r.pd = false;
+        if (d >= r.py && !r.pd) { r.ml -= 1; r.pd = true; }
+      }
+    });
+    sec.rows = sec.rows.filter(r => !r.isP || r.ml > 0);
+  });
+  ST.lastM = m;
+}
+
 function render() {
+  checkLogic();
   const container = document.getElementById('sc');
   container.innerHTML = '';
   let tM = 0; let tD = 0;
 
   ST.sections.forEach(sec => {
     let sT = 0;
-    let rowsHtml = sec.rows.map((r, idx) => {
+    let rowsHtml = sec.rows.map((r) => {
       const isPaid = r.isP && r.pd;
       if (!isPaid) { sT += r.a; tM += r.a; }
       if (r.isP) tD += (r.a * r.ml);
@@ -172,13 +189,11 @@ function render() {
   document.getElementById('cy').innerText = fmt(tM * 12);
 }
 
-// GESTION ITEMS
 function openAdd(sid) {
   editCtx = { sid, rid: null };
   document.getElementById('modal-title').innerText = "➕ Ajouter";
   document.getElementById('nn').value = ''; document.getElementById('na').value = ''; document.getElementById('ne').value = '';
-  document.getElementById('is-plan').checked = false;
-  togglePlanFields(false);
+  document.getElementById('is-plan').checked = false; togglePlanFields(false);
   document.getElementById('modal').style.display = 'flex';
 }
 
@@ -218,33 +233,23 @@ function saveItem() {
 }
 
 function delItem(sid, rid) { if(confirm('Supprimer ?')) { const s = ST.sections.find(x=>x.id===sid); s.rows = s.rows.filter(r=>r.id!==rid); sync(); } }
-
-// GESTION CATÉGORIES
 function openCatModal() { document.getElementById('modal-cat').style.display = 'flex'; }
 function addCategory() {
   const n = document.getElementById('cn').value, e = document.getElementById('ce').value;
   if(n) { ST.sections.push({ id: 's'+Date.now(), icon: e||'📁', title: n, rows: [] }); sync(); document.getElementById('modal-cat').style.display='none'; }
 }
-function delCat(sid) { if(confirm('Supprimer toute la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
-function renameCat(sid) { 
-    const s = ST.sections.find(x=>x.id===sid);
-    const newT = prompt("Nouveau nom :", s.title);
-    if(newT) { s.title = newT; sync(); }
-}
-
+function delCat(sid) { if(confirm('Supprimer la catégorie ?')) { ST.sections = ST.sections.filter(s=>s.id!==sid); sync(); } }
+function renameCat(sid) { const s = ST.sections.find(x=>x.id===sid); const newT = prompt("Nom :", s.title); if(newT) { s.title = newT; sync(); } }
 function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
-// IMPORT / EXPORT FIXE
+// Export ultra-simple (copier/coller)
 function exportData() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ST));
-  const dl = document.createElement('a');
-  dl.setAttribute("href", dataStr);
-  dl.setAttribute("download", "budget_backup.json");
-  dl.click();
+  const code = btoa(JSON.stringify(ST));
+  prompt("Copie ce code pour sauvegarder tes données :", code);
 }
 function importData() {
   const code = prompt("Colle ton code de sauvegarde ici :");
-  if (code) { try { ST = JSON.parse(atob(code)); sync(); } catch(e) { alert("Erreur de format !"); } }
+  if (code) { try { ST = JSON.parse(atob(code)); sync(); } catch(e) { alert("Code invalide !"); } }
 }
 
 render();
