@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>💰 Budget Pro Officiel</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -20,34 +22,33 @@ h1,h2{font-family:'Syne',sans-serif;}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
 .card{background:var(--s);border:1px solid var(--b);border-radius:13px;padding:13px;position:relative;overflow:hidden;}
 .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:13px 13px 0 0;}
-.card.pu::before{background:#6c63ff;}.card.pi::before{background:#ff6584;}
-.card.gr::before{background:#43e97b;}.card.or::before{background:#ff9f43;}
+.card.pu::before{background:#6c63ff;}
+.card.pi::before{background:#ff6584;}
+.card.gr::before{background:#43e97b;}
+.card.or::before{background:#ff9f43;}
 .cl{font-size:.64rem;color:var(--m);text-transform:uppercase;margin-bottom:3px;}
 .cv{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;}
 
-/* Zone de sauvegarde améliorée */
-#save-area{display:none; background:#fff; color:#000; padding:15px; border-radius:12px; margin-bottom:20px; border:2px solid var(--a);}
-#save-code{width:100%; height:80px; border:1px solid #ccc; margin-top:10px; font-family:monospace; font-size:0.7rem; padding:5px;}
+#save-area{display:none; background:#fff; color:#000; padding:15px; border-radius:12px; margin-bottom:20px;}
+.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;}
 
 .sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
-.sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);background:rgba(255,255,255,0.02);}
-.sh h2{font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:8px;}
-.bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:700;background:rgba(108,99,255,.18);color:#6c63ff;}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);}
+.sh h2{font-size:.88rem;}
+.bk{font-size:.67rem;padding:2px 8px;border-radius:20px;background:rgba(108,99,255,.18);color:#6c63ff;}
 
 table{width:100%;border-collapse:collapse;}
-td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid var(--b); cursor:pointer;}
-.ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;}
-.bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:0.9rem;}
-.ba{background:rgba(108,99,255,.05);border:1px dashed var(--a);color:var(--a);border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:calc(100% - 28px);margin:10px 14px;}
+td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
+.ta{text-align:right;font-weight:600;}
+.bd{background:none;border:none;color:var(--m);cursor:pointer;}
 
-.rem-info{font-size:0.6rem;color:var(--m);display:block;margin-bottom:2px;}
-.rem-total{color:#43e97b;font-weight:700;}
+.ba{background:rgba(108,99,255,0.1);border:1px dashed var(--a);color:var(--a);border-radius:10px;padding:12px;width:calc(100% - 28px);margin:10px 14px;}
 
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px);}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;}
 .mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:350px;}
-.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;}
 </style>
 </head>
+
 <body>
 
 <div class="hdr">
@@ -58,86 +59,34 @@ td{padding:12px 14px;font-size:.85rem;border-bottom:1px solid var(--b); cursor:p
   </div>
 </div>
 
-<div id="save-area">
-    <b style="font-size:0.9rem">Copie ce code pour sauvegarder :</b>
-    <textarea id="save-code" readonly onclick="this.select()"></textarea>
-    <button class="fi" style="background:var(--a); color:white; margin-top:10px; border:none;" onclick="document.getElementById('save-area').style.display='none'">Fermer</button>
-</div>
+<!-- IMPORT FILE HIDDEN -->
+<input type="file" id="file-import" accept="application/json" style="display:none" onchange="handleImportFile(event)">
 
-<div class="cards">
-  <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct">0.00 €</div></div>
-  <div class="card pi"><div class="cl">Par quinzaine</div><div class="cv" id="ch">0.00 €</div></div>
-  <div class="card gr"><div class="cl">Total Annuel</div><div class="cv" id="ca">0.00 €</div></div>
-  <div class="card or"><div class="cl">Total Dettes</div><div class="cv" id="cd">0.00 €</div></div>
+<div id="save-area">
+  <b>Sauvegarde générée</b>
 </div>
 
 <div id="sc"></div>
 
-<div class="ap" style="margin-top:20px;">
-    <button class="ba" style="background:rgba(67,233,123,0.1); border-color:#43e97b; color:#43e97b;" onclick="addCategory()">📁 Nouvelle catégorie</button>
-</div>
-
 <div class="mo" id="modal">
   <div class="mb">
-    <h3 style="margin-bottom:15px; font-family:Syne;">➕ Ajouter une ligne</h3>
-    <input class="fi" id="nn" placeholder="Nom de la facture">
-    <input class="fi" id="na" type="number" step="0.01" placeholder="Montant €">
-    <input class="fi" id="ne" placeholder="Emoji (🏠, 💳...)">
-    <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-      <input type="checkbox" id="is-plan">
-      <span style="font-size:0.85rem">📅 Échéancier (Dette)</span>
-    </div>
-    <div id="plan-div" style="display:none; margin-bottom:15px;">
-      <input class="fi" id="n-months" type="number" placeholder="Mois restants">
-    </div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-      <button class="fi" onclick="closeModal()">Annuler</button>
-      <button class="fi" style="background:var(--a); color:white; font-weight:bold; border:none;" onclick="saveItem()">Valider ✓</button>
-    </div>
+    <h3>Ajouter</h3>
+    <input id="nn" class="fi" placeholder="Nom">
+    <input id="na" class="fi" type="number" placeholder="Montant">
+    <button onclick="saveItem()" class="fi" style="background:var(--a);color:white">Valider</button>
+    <button onclick="closeModal()" class="fi">Annuler</button>
   </div>
 </div>
 
 <script>
-document.getElementById('is-plan').onchange = function() {
-    document.getElementById('plan-div').style.display = this.checked ? 'block' : 'none';
-};
-
 const INITIAL = {
   sections: [
-    {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
-        {n:'Crédit maison', a:552.80, e:'🏠'},
-        {n:'Électricité / Gaz', a:145.69, e:'⚡'},
-        {n:'Eau', a:40.97, e:'💦'},
-        {n:'Internet', a:67.00, e:'🛜'},
-        {n:'Taxe Poubelle', a:15.50, e:'🗑️'},
-        {n:'Energy', a:0.99, e:'⚡'}
+    {id:'s1', icon:'🏠', title:'Logement', rows:[
+      {n:'Crédit maison', a:552.80, e:'🏠'},
+      {n:'Électricité', a:145.69, e:'⚡'}
     ]},
-    {id:'s2', icon:'💳', title:'Crédits & Assurances', rows:[
-        {n:'Buy Way', a:124.00, e:'💳'},
-        {n:'Assurance incendie', a:52.50, e:'🔥'},
-        {n:'Mutuelle', a:13.50, e:'🏥'},
-        {n:'CSC', a:22.52, e:'🤝'},
-        {n:'Dela', a:11.35, e:'💀'},
-        {n:'AXA', a:39.25, e:'🛡️'},
-        {n:'Verisure', a:55.87, e:'🚨'}
-    ]},
-    {id:'s3', icon:'📱', title:'Télécom & Loisirs', rows:[
-        {n:'Téléphone', a:114.99, e:'📱'},
-        {n:'Tv', a:30.00, e:'📺'},
-        {n:'Amazon', a:9.98, e:'📦'},
-        {n:'Netflix', a:21.99, e:'🎬'},
-        {n:'Apple music', a:10.99, e:'🎵'},
-        {n:'Disney +', a:15.99, e:'🏰'},
-        {n:'iCloud', a:2.99, e:'🤖'},
-        {n:'Ps5', a:13.99, e:'🎮'},
-        {n:'Nabu casa', a:8.11, e:'📟'}
-    ]},
-    {id:'s4', icon:'🛒', title:'Consommation', rows:[
-        {n:'Course', a:120.00, e:'🛒'}
-    ]},
-    {id:'s5', icon:'🏛️', title:'Impôt & taxe', rows:[
-        {n:'Contribution', a:103.32, e:'🏛️', isP:true, ml:4},
-        {n:'Cadastre', a:35.34, e:'🏠', isP:true, ml:2}
+    {id:'s2', icon:'💳', title:'Crédits', rows:[
+      {n:'Buy Way', a:124.00, e:'💳'}
     ]}
   ]
 };
@@ -145,89 +94,80 @@ const INITIAL = {
 let ST = JSON.parse(localStorage.getItem('budget_pro_v7')) || INITIAL;
 let curSid = null;
 
-function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
+function fmt(n){return n.toLocaleString('fr-FR',{minimumFractionDigits:2})+' €';}
 
-function render() {
-  const container = document.getElementById('sc');
-  container.innerHTML = '';
-  let tM = 0; let tD = 0;
+function render(){
+  const c = document.getElementById('sc');
+  c.innerHTML = '';
 
-  ST.sections.forEach(sec => {
-    let sT = 0;
-    let rowsHtml = sec.rows.map((r, idx) => {
-      tM += r.a; sT += r.a;
-      if(r.isP) tD += (r.a * r.ml);
-      return `<tr>
-        <td onclick="editItem('${sec.id}', ${idx})">
-          ${r.isP ? `<span class="rem-info">Reste <span class="rem-total">${fmt(r.a * r.ml)}</span> (${r.ml} mois)</span>` : ''}
-          <span style="font-weight:700">${r.e || '💸'} ${r.n}</span>
-        </td>
-        <td class="ta" onclick="editItem('${sec.id}', ${idx})">${fmt(r.a)}</td>
-        <td style="text-align:right"><button class="bd" onclick="delItem('${sec.id}', ${idx})">🗑</button></td>
-      </tr>`;
-    }).join('');
+  ST.sections.forEach(sec=>{
+    const div=document.createElement('div');
+    div.className='sec';
 
-    const div = document.createElement('div');
-    div.className = 'sec';
-    div.innerHTML = `
+    div.innerHTML=`
       <div class="sh">
         <h2>${sec.icon} ${sec.title}</h2>
-        <span class="bk">${fmt(sT)}</span>
       </div>
-      <table><tbody>${rowsHtml}</tbody></table>
-      <button class="ba" onclick="openModal('${sec.id}')">➕ Ajouter une ligne</button>
+      <table>
+        ${sec.rows.map((r,i)=>`
+          <tr>
+            <td>${r.e} ${r.n}</td>
+            <td class="ta">${fmt(r.a)}</td>
+          </tr>
+        `).join('')}
+      </table>
     `;
-    container.appendChild(div);
+    c.appendChild(div);
   });
 
-  document.getElementById('ct').innerText = fmt(tM);
-  document.getElementById('ch').innerText = fmt(tM/2);
-  document.getElementById('ca').innerText = fmt(tM * 12);
-  document.getElementById('cd').innerText = fmt(tD);
-  localStorage.setItem('budget_pro_v7', JSON.stringify(ST));
+  localStorage.setItem('budget_pro_v7',JSON.stringify(ST));
 }
 
-function openModal(sid) { curSid = sid; document.getElementById('modal').style.display = 'flex'; }
-function closeModal() { document.getElementById('modal').style.display = 'none'; }
-
-function saveItem() {
-  const n = document.getElementById('nn').value, a = parseFloat(document.getElementById('na').value);
-  if(n && a) {
-    const isP = document.getElementById('is-plan').checked;
-    ST.sections.find(s => s.id === curSid).rows.push({
-      n, a, e: document.getElementById('ne').value || '💸',
-      isP, ml: isP ? parseInt(document.getElementById('n-months').value) : 0
-    });
-    render(); closeModal();
-  }
+function exportData(){
+  const blob=new Blob([JSON.stringify(ST,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='budget_sauvegarde.json';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-function editItem(sid, idx) {
-    const r = ST.sections.find(s => s.id === sid).rows[idx];
-    const newN = prompt("Modifier le nom :", r.n);
-    if(newN) r.n = newN;
-    const newA = prompt("Modifier le montant (€) :", r.a);
-    if(newA) r.a = parseFloat(newA);
-    render();
+function importData(){
+  document.getElementById('file-import').click();
 }
 
-function delItem(sid, i) { if(confirm('Supprimer ?')) { ST.sections.find(s => s.id === sid).rows.splice(i, 1); render(); } }
-function addCategory() { const t = prompt("Nom de la catégorie ?"); if(t) { ST.sections.push({id:'s'+Date.now(), icon:'📁', title:t, rows:[]}); render(); } }
+function handleImportFile(e){
+  const file=e.target.files[0];
+  const reader=new FileReader();
 
-function exportData() {
-    const area = document.getElementById('save-area');
-    const txt = document.getElementById('save-code');
-    txt.value = btoa(JSON.stringify(ST));
-    area.style.display = 'block';
-    window.scrollTo(0,0);
+  reader.onload=function(ev){
+    try{
+      ST=JSON.parse(ev.target.result);
+      render();
+      alert('Sauvegarde importée ✔');
+    }catch(err){
+      alert('Fichier invalide');
+    }
+  };
+
+  reader.readAsText(file);
 }
 
-function importData() {
-    const c = prompt("Colle ton code de sauvegarde ici :");
-    if(c) { try { ST = JSON.parse(atob(c)); render(); } catch(e) { alert("Code invalide !"); } }
+function saveItem(){
+  const n=document.getElementById('nn').value;
+  const a=parseFloat(document.getElementById('na').value);
+  if(!n||!a)return;
+
+  ST.sections[0].rows.push({n,a,e:'💸'});
+  render();
+  closeModal();
 }
+
+function closeModal(){document.getElementById('modal').style.display='none';}
 
 render();
 </script>
+
 </body>
 </html>
