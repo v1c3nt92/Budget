@@ -12,7 +12,6 @@
 body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 40px;}
 h1,h2{font-family:'Syne',sans-serif;}
 
-/* Header stable */
 .hdr{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid var(--b); padding-bottom:10px;}
 .hdr-titles h1{font-size:1.8rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .hdr-tools{display:flex; gap:10px;}
@@ -32,10 +31,17 @@ h1,h2{font-family:'Syne',sans-serif;}
 .bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:700;background:rgba(108,99,255,.18);color:#6c63ff;}
 
 table{width:100%;border-collapse:collapse;}
-td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
+td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b); cursor:pointer;}
 .ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;}
 .bd{background:none;border:none;color:var(--m);cursor:pointer;font-size:0.9rem;}
 .ba{background:rgba(108,99,255,.05);border:1px dashed var(--a);color:var(--a);border-radius:10px;padding:12px;font-size:.8rem;cursor:pointer;width:calc(100% - 28px);margin:10px 14px;}
+
+.rem-info{font-size:0.6rem;color:var(--m);display:block;margin-bottom:2px;}
+.rem-total{color:#43e97b;font-weight:700;}
+
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px);}
+.mb{background:var(--s);border:1px solid var(--b);border-radius:20px;padding:25px;width:100%;max-width:350px;}
+.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:10px;padding:12px;margin-bottom:12px;outline:none;}
 </style>
 </head>
 <body>
@@ -43,7 +49,7 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
 <div class="hdr">
   <div class="hdr-titles"><h1>Mon Budget</h1></div>
   <div class="hdr-tools">
-    <button class="btn-icon" onclick="showExport()">💾</button>
+    <button class="btn-icon" onclick="copyCode()">💾</button>
     <button class="btn-icon" onclick="showImport()">📥</button>
   </div>
 </div>
@@ -57,8 +63,35 @@ td{padding:10px 14px;font-size:.85rem;border-bottom:1px solid var(--b);}
 
 <div id="sc"></div>
 
+<div class="ap" style="margin-top:20px;">
+    <button class="ba" style="background:rgba(67,233,123,0.1); border-color:#43e97b; color:#43e97b;" onclick="addCategory()">📁 Nouvelle catégorie</button>
+</div>
+
+<div class="mo" id="modal">
+  <div class="mb">
+    <h3 id="modal-title" style="margin-bottom:15px; font-family:Syne;">➕ Ajouter</h3>
+    <input class="fi" id="nn" placeholder="Nom de la facture">
+    <input class="fi" id="na" type="number" step="0.01" placeholder="Montant €">
+    <input class="fi" id="ne" placeholder="Emoji (🏠, 💳...)">
+    
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
+      <input type="checkbox" id="is-plan" onchange="document.getElementById('plan-fields').style.display = this.checked ? 'block' : 'none'">
+      <span style="font-size:0.85rem">📅 Échéancier (Impôts...)</span>
+    </div>
+
+    <div id="plan-fields" style="display:none; border-left:2px solid var(--a); padding-left:12px; margin-bottom:15px;">
+      <input class="fi" id="n-months" type="number" placeholder="Mois restants">
+      <input class="fi" id="pay-day" type="number" placeholder="Jour prélèvement (ex: 22)">
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+      <button class="fi" style="background:var(--s2); border:none; color:var(--m)" onclick="closeModal()">Annuler</button>
+      <button class="fi" style="background:var(--a); border:none; color:white; font-weight:bold;" onclick="saveItem()">Valider ✓</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// TOUTES TES DONNÉES SONT ICI (Gravées dans le code)
 const INITIAL = {
   sections: [
     {id:'s1', icon:'🏠', title:'Logement & Énergie', rows:[
@@ -96,14 +129,36 @@ const INITIAL = {
         {n:'Taxe poubelle (Avr)', a:220.00, e:'🗑️', isA:true},
         {n:'Taxe égout (Juil)', a:20.00, e:'🌊', isA:true}
     ]}
-  ]
+  ],
+  lastCheck: new Date().getMonth()
 };
 
-let ST = JSON.parse(localStorage.getItem('bdg_pwa_v3')) || INITIAL;
+let ST = JSON.parse(localStorage.getItem('bdg_pwa_v4')) || INITIAL;
+let curSid = null;
 
 function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
 
+function logic() {
+  const now = new Date();
+  const m = now.getMonth();
+  const d = now.getDate();
+  
+  ST.sections.forEach(sec => {
+    sec.rows = sec.rows.filter(r => {
+      if (r.isP) {
+        if (ST.lastCheck !== m && d >= r.pd) {
+            r.ml -= 1;
+        }
+        return r.ml > 0;
+      }
+      return true;
+    });
+  });
+  ST.lastCheck = m;
+}
+
 function render() {
+  logic();
   const container = document.getElementById('sc');
   container.innerHTML = '';
   let tM = 0; let tA = 0;
@@ -113,8 +168,11 @@ function render() {
     let rowsHtml = sec.rows.map((r, idx) => {
       if(!r.isA) { sT += r.a; tM += r.a; } else { tA += r.a; }
       return `<tr>
-        <td><span style="font-weight:700">${r.e || ''} ${r.n}</span></td>
-        <td class="ta">${fmt(r.a)}</td>
+        <td onclick="editItem('${sec.id}', ${idx})">
+          ${r.isP ? `<span class="rem-info">Reste <span class="rem-total">${fmt(r.a * r.ml)}</span> (${r.ml} mois)</span>` : ''}
+          <span style="font-weight:700">${r.e || ''} ${r.n}</span>
+        </td>
+        <td class="ta" onclick="editItem('${sec.id}', ${idx})">${fmt(r.a)}</td>
         <td style="text-align:right"><button class="bd" onclick="del('${sec.id}', ${idx})">🗑</button></td>
       </tr>`;
     }).join('');
@@ -124,7 +182,7 @@ function render() {
     div.innerHTML = `
       <div class="sh"><h2>${sec.icon} ${sec.title} <span class="bk">${sec.id === 's5' ? fmt(tA) : fmt(sT)}</span></h2></div>
       <table><tbody>${rowsHtml}</tbody></table>
-      <div class="ap"><button class="ba" onclick="addItem('${sec.id}')">➕ Ajouter une ligne</button></div>
+      <div class="ap"><button class="ba" onclick="openModal('${sec.id}')">➕ Ajouter une ligne</button></div>
     `;
     container.appendChild(div);
   });
@@ -133,17 +191,56 @@ function render() {
   document.getElementById('ch').innerText = fmt(tM/2);
   document.getElementById('ca').innerText = fmt(tM * 12);
   document.getElementById('cy').innerText = fmt(tA);
-  localStorage.setItem('bdg_pwa_v3', JSON.stringify(ST));
+  localStorage.setItem('bdg_pwa_v4', JSON.stringify(ST));
 }
 
-function addItem(sid) {
-  const n = prompt("Nom ?"); const a = prompt("Montant ?");
-  if(n && a) { ST.sections.find(s => s.id === sid).rows.push({n, a: parseFloat(a), e: '💸'}); render(); }
+function openModal(sid) { curSid = sid; document.getElementById('modal').style.display = 'flex'; }
+function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+function saveItem() {
+  const n = document.getElementById('nn').value;
+  const a = parseFloat(document.getElementById('na').value);
+  const p = document.getElementById('is-plan').checked;
+  if(n && a) {
+    ST.sections.find(s => s.id === curSid).rows.push({
+      n, a, e: document.getElementById('ne').value || '💸',
+      isP: p, ml: p ? parseInt(document.getElementById('n-months').value) : 0,
+      pd: p ? parseInt(document.getElementById('pay-day').value) : 0
+    });
+    render(); closeModal();
+  }
+}
+
+function editItem(sid, idx) {
+  const r = ST.sections.find(s => s.id === sid).rows[idx];
+  const newN = prompt("Nom :", r.n);
+  const newA = prompt("Montant :", r.a);
+  if(newN) r.n = newN;
+  if(newA) r.a = parseFloat(newA);
+  render();
+}
+
+function addCategory() {
+    const t = prompt("Nom de la catégorie ?");
+    if(t) { ST.sections.push({id: 's'+Date.now(), icon: '📁', title: t, rows: []}); render(); }
 }
 
 function del(sid, i) { if(confirm('Supprimer ?')) { ST.sections.find(s => s.id === sid).rows.splice(i, 1); render(); } }
-function showExport() { prompt("Code de sauvegarde :", btoa(JSON.stringify(ST))); }
-function showImport() { let c = prompt("Colle ton code :"); if(c) { try { ST = JSON.parse(atob(c)); render(); } catch(e) { alert("Erreur !"); } } }
+
+async function copyCode() {
+  const code = btoa(JSON.stringify(ST));
+  try {
+    await navigator.clipboard.writeText(code);
+    alert("Code copié dans le presse-papier ! Garde-le précieusement.");
+  } catch (err) {
+    prompt("Copie manuellement ce code :", code);
+  }
+}
+
+function showImport() { 
+  let c = prompt("Colle ton code de sauvegarde ici :"); 
+  if(c) { try { ST = JSON.parse(atob(c)); render(); } catch(e) { alert("Erreur de code !"); } } 
+}
 
 render();
 </script>
