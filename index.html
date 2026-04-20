@@ -6,56 +6,57 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0f0f13">
-<title>💰 Budget Pro Dynamique</title>
+<title>💰 Mon Budget Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f0f13;--s:#17171f;--s2:#1e1e28;--b:#2a2a38;--a:#6c63ff;--t:#f0f0f8;--m:#7a7a9a;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--t);font-family:'DM Sans',sans-serif;padding:18px 13px 40px;}
 h1,h2{font-family:'Syne',sans-serif;}
-.hdr{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; padding:0 5px;}
+
+/* LE HEADER - Retour au design propre avec les disquettes en haut */
+.hdr{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; padding:0 5px;}
 .hdr-titles h1{font-size:1.7rem;font-weight:800;background:linear-gradient(135deg,#6c63ff,#ff6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hdr-titles p{color:var(--m);font-size:.75rem;margin-top:2px;}
-.hdr-tools{display:flex; gap:12px; margin-top:5px;}
-.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; transition:0.2s;}
-.btn-icon:active{transform:scale(0.9);}
+.hdr-tools{display:flex; gap:10px;}
+.btn-icon{background:var(--s); border:1px solid var(--b); color:var(--t); width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.2rem; transition:0.2s;}
+.btn-icon:active{transform:scale(0.9); background:var(--b);}
+
 .saved{font-size:.7rem;color:#43e97b;text-align:center;margin-bottom:15px;opacity:0;transition:opacity .4s;display:block;}
 .saved.show{opacity:1;}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:18px;}
-.card{background:var(--s);border:1px solid var(--b);border-radius:13px;padding:13px;position:relative;overflow:hidden;}
-.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:13px 13px 0 0;}
-.card.pu::before{background:#6c63ff;}.card.pi::before{background:#ff6584;}
-.card.gr::before{background:#43e97b;}.card.or::before{background:#ff9f43;}
-.cl{font-size:.64rem;color:var(--m);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
-.cv{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;}
-.sec{background:var(--s);border:1px solid var(--b);border-radius:15px;overflow:hidden;margin-bottom:11px;}
-.sh{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--b);cursor:pointer;user-select:none;}
-.sh h2{font-size:.88rem;font-weight:700;display:flex;align-items:center;gap:5px;}
-.bk{font-size:.67rem;padding:2px 8px;border-radius:20px;font-weight:500;}
-.bk.pu{background:rgba(108,99,255,0.2);color:#6c63ff;}
-.cv2{transition:transform .3s;color:var(--m);font-size:.7rem;}
-.col .cv2{transform:rotate(-90deg);}
-.cb{overflow:hidden;transition:max-height .3s ease;}
-table{width:100%;border-collapse:collapse;}
-th{text-align:left;padding:6px 13px;font-size:.64rem;color:var(--m);text-transform:uppercase;background:var(--s2);}
-td{padding:10px 13px;font-size:.83rem;border-bottom:1px solid var(--b);vertical-align:middle;}
-.ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;}
-.tac{text-align:right;width:34px;}
-.rem-info{display:block;font-size:0.62rem;color:var(--m);margin-bottom:2px;}
+
+/* Les Cartes de score */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;}
+.card{background:var(--s);border:1px solid var(--b);border-radius:15px;padding:15px;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.card.pu::before{background:#6c63ff;}.card.gr::before{background:#43e97b;}
+.cl{font-size:.65rem;color:var(--m);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.cv{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;}
+
+/* Liste des charges */
+.sec{background:var(--s);border:1px solid var(--b);border-radius:16px;overflow:hidden;margin-bottom:10px;}
+.sh{display:flex;justify-content:space-between;align-items:center;padding:14px;user-select:none;}
+.ta{text-align:right;font-family:'Syne',sans-serif;font-weight:600;font-size:1rem;}
+.rem-info{font-size:0.65rem;color:var(--m);margin-top:3px;}
 .rem-total{color:#43e97b;font-weight:700;}
-.ba{background:rgba(108,99,255,.1);border:1px dashed rgba(108,99,255,.35);color:#6c63ff;border-radius:7px;padding:7px;font-size:.76rem;cursor:pointer;width:100%;margin:10px 0;}
-.ap{padding:0 13px;}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;display:flex;align-items:center;justify-content:center;padding:15px;}
-.mb{background:var(--s);border:1px solid var(--b);border-radius:18px;padding:20px;width:100%;max-width:350px;}
-.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:9px;padding:9px;margin-bottom:10px;outline:none;}
-.tg-row{display:flex;align-items:center;gap:10px;margin:10px 0;}
-.tg{appearance:none;width:35px;height:20px;background:var(--b);border-radius:10px;position:relative;cursor:pointer;}
+
+/* Bouton Ajouter style Pointillé */
+.ap{padding:0 5px; margin-top: 10px;}
+.ba{background:rgba(108,99,255,0.05); border:1px dashed rgba(108,99,255,0.3); color:#6c63ff; border-radius:12px; padding:15px; font-size:.85rem; cursor:pointer; width:100%; font-family:'DM Sans',sans-serif; font-weight:600; transition: 0.2s;}
+.ba:active{background:rgba(108,99,255,0.15);}
+
+/* Modaux */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(5px);}
+.mb{background:var(--s);border:1px solid var(--b);border-radius:24px;padding:25px;width:100%;max-width:360px;}
+.fi{width:100%;background:var(--s2);border:1px solid var(--b);color:var(--t);border-radius:12px;padding:14px;margin-bottom:12px;outline:none;font-size:1rem;}
+.tg-row{display:flex;align-items:center;gap:12px;margin:10px 0 20px 0;}
+.tg{appearance:none;width:40px;height:22px;background:var(--b);border-radius:15px;position:relative;cursor:pointer;transition:0.3s;}
 .tg:checked{background:var(--a);}
-.tg:checked::after{left:17px;}
-.tg::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.2s;}
-.modal-save { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 110; display: none; align-items: center; justify-content: center; padding: 20px; }
-.modal-save-content { background: var(--s); border: 1px solid var(--b); border-radius: 20px; padding: 20px; width: 100%; max-width: 360px; }
-.data-box { width: 100%; height: 160px; background: #000; color: #43e97b; font-family: monospace; font-size: 0.65rem; border-radius: 10px; padding: 12px; margin: 15px 0; }
+.tg::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;}
+.tg:checked::after{left:21px;}
+
+.modal-save { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 110; display: none; align-items: center; justify-content: center; padding: 20px; }
+.data-box { width:100%; height:180px; background:#000; color:#43e97b; font-family:monospace; font-size:0.75rem; border-radius:15px; padding:15px; border:1px solid var(--b); margin:15px 0; }
 </style>
 </head>
 <body>
@@ -63,7 +64,7 @@ td{padding:10px 13px;font-size:.83rem;border-bottom:1px solid var(--b);vertical-
 <div class="hdr">
   <div class="hdr-titles">
     <h1>💰 Mon Budget</h1>
-    <p>Gestion dynamique des impôts</p>
+    <p>Gestion dynamique</p>
   </div>
   <div class="hdr-tools">
     <button class="btn-icon" onclick="showExport()">💾</button>
@@ -71,177 +72,170 @@ td{padding:10px 13px;font-size:.83rem;border-bottom:1px solid var(--b);vertical-
   </div>
 </div>
 
-<span class="saved" id="sv">✅ Mis à jour le <span id="last-date"></span></span>
+<span class="saved" id="sv">✅ Mis à jour</span>
 
 <div class="cards">
-  <div class="card pu"><div class="cl">Total mensuel</div><div class="cv" id="ct">0 €</div></div>
-  <div class="card gr"><div class="cl">Restant à payer</div><div class="cv" id="cr">0 €</div></div>
+  <div class="card pu">
+    <div class="cl">Total ce mois</div>
+    <div class="cv" id="ct">0.00 €</div>
+  </div>
+  <div class="card gr">
+    <div class="cl">Restant Dettes</div>
+    <div class="cv" id="cr">0.00 €</div>
+  </div>
 </div>
 
 <div id="sc"></div>
 
+<div class="ap">
+    <button class="ba" onclick="oM()">+ Ajouter une dépense / impôt</button>
+</div>
+
 <div class="mo" id="modal" style="display:none">
   <div class="mb">
-    <h3 style="margin-bottom:15px">➕ Ajouter une charge</h3>
+    <h3 style="margin-bottom:20px; font-family:Syne; font-size:1.2rem;">Nouveau Paiement</h3>
     <input class="fi" id="nn" placeholder="Nom (ex: Impôts)">
-    <input class="fi" id="na" type="number" placeholder="Montant mensuel €">
+    <input class="fi" id="na" type="number" placeholder="Montant mensuel (€)">
     
     <div class="tg-row">
       <input type="checkbox" class="tg" id="is-plan" onchange="document.getElementById('plan-fields').style.display = this.checked ? 'block' : 'none'">
-      <span>📊 Échéancier (Dettes / Impôts)</span>
+      <span style="font-weight:500;">📅 Échéancier (Dette/Impôt)</span>
     </div>
 
-    <div id="plan-fields" style="display:none; border-left:2px solid var(--a); padding-left:10px; margin-bottom:10px;">
-      <label style="font-size:0.7rem; color:var(--m)">Nombre de mois restants :</label>
+    <div id="plan-fields" style="display:none; border-left:3px solid var(--a); padding-left:15px; margin-bottom:20px;">
+      <label style="font-size:0.65rem; color:var(--m); text-transform:uppercase; font-weight:bold;">Mois restants :</label>
       <input class="fi" id="n-months" type="number" value="12">
-      <label style="font-size:0.7rem; color:var(--m)">Jour du prélèvement (1-31) :</label>
-      <input class="fi" id="pay-day" type="number" value="22">
+      <label style="font-size:0.65rem; color:var(--m); text-transform:uppercase; font-weight:bold;">Jour de prélèvement :</label>
+      <input class="fi" id="pay-day" type="number" value="22" max="31">
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px;">
-      <button class="fi" style="background:var(--s2)" onclick="cM()">Annuler</button>
-      <button class="fi" style="background:var(--a); color:white; font-weight:bold;" onclick="confAdd()">Ajouter ✓</button>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <button class="fi" style="background:var(--s2); border:none; color:var(--m); cursor:pointer;" onclick="cM()">Annuler</button>
+      <button class="fi" style="background:var(--a); border:none; color:white; font-weight:bold; cursor:pointer;" onclick="confAdd()">Valider ✓</button>
     </div>
   </div>
 </div>
 
 <div class="modal-save" id="modal-save">
-  <div class="modal-save-content">
-    <h3 id="ms-title">Sauvegarde</h3>
+  <div class="mb">
+    <h3 id="ms-title" style="font-family:Syne;">Sauvegarde</h3>
     <textarea class="data-box" id="ms-box" spellcheck="false" onclick="this.select()"></textarea>
-    <button class="fi" style="background:var(--a); color:white" onclick="closeMS()">Fermer</button>
-    <button id="btn-valider-import" class="fi" style="background:#43e97b; color:black; display:none">Valider l'import</button>
+    <div id="import-zone" style="display:none">
+        <button class="fi" style="background:#43e97b; color:black; font-weight:bold; border:none; margin-bottom:10px;" id="btn-confirm-import">CONFIRMER L'IMPORT</button>
+    </div>
+    <button class="fi" style="background:var(--s2); border:none; color:var(--t); cursor:pointer;" onclick="closeMS()">Fermer</button>
   </div>
 </div>
 
 <script>
-let ST = JSON.parse(localStorage.getItem('bdg_v3')) || { 
+let ST = JSON.parse(localStorage.getItem('bdg_v4')) || { 
   items: [], 
-  col: {}, 
-  lastProcessedMonth: new Date().getMonth() 
+  lastM: new Date().getMonth() 
 };
 
 function save() { 
-  localStorage.setItem('bdg_v3', JSON.stringify(ST)); 
-  document.getElementById('sv').classList.add('show');
-  document.getElementById('last-date').innerText = new Date().toLocaleTimeString();
+  localStorage.setItem('bdg_v4', JSON.stringify(ST)); 
+  const s = document.getElementById('sv');
+  s.classList.add('show');
+  setTimeout(() => s.classList.remove('show'), 2000);
 }
 
 function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:2}) + ' €'; }
 
-function checkCalculations() {
+function checkLogic() {
   const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentDay = now.getDate();
+  const m = now.getMonth();
+  const d = now.getDate();
 
-  ST.items.forEach((item, index) => {
+  ST.items.forEach(item => {
     if (item.isPlan) {
-      // Si on change de mois, on réinitialise le statut "payé ce mois-ci"
-      if (ST.lastProcessedMonth !== currentMonth) {
-        item.paidThisMonth = false;
-      }
-
-      // Si le jour de paiement est passé et qu'on ne l'a pas encore décompté
-      if (currentDay >= item.payDay && !item.paidThisMonth) {
+      if (ST.lastM !== m) { item.paidM = false; }
+      if (d >= item.payDay && !item.paidM) {
         item.monthsLeft -= 1;
-        item.paidThisMonth = true;
+        item.paidM = true;
       }
     }
   });
 
-  // Supprimer ceux qui sont arrivés à 0
   ST.items = ST.items.filter(item => !item.isPlan || item.monthsLeft > 0);
-  ST.lastProcessedMonth = currentMonth;
+  ST.lastM = m;
   save();
 }
 
 function render() {
-  checkCalculations();
+  checkLogic();
   const container = document.getElementById('sc');
   container.innerHTML = '';
-  
-  let totalMensuel = 0;
-  let totalRestantGlobal = 0;
+  let totalM = 0; let totalD = 0;
 
   ST.items.forEach((item, idx) => {
-    const isPaid = item.isPlan && item.paidThisMonth;
-    if (!isPaid) totalMensuel += item.amount;
-    if (item.isPlan) totalRestantGlobal += (item.amount * item.monthsLeft);
+    const isPaid = item.isPlan && item.paidM;
+    if (!isPaid) totalM += item.amount;
+    if (item.isPlan) totalD += (item.amount * item.monthsLeft);
 
     const div = document.createElement('div');
     div.className = 'sec';
     div.innerHTML = `
-      <div class="sh">
-        <div style="display:flex; flex-direction:column">
-          <span style="font-weight:800; font-size:0.9rem">${item.name} ${isPaid ? '✅' : ''}</span>
-          ${item.isPlan ? `
-            <span class="rem-info">Restant: <span class="rem-total">${fmt(item.amount * item.monthsLeft)}</span> (${item.monthsLeft} mois)</span>
-            <span style="font-size:0.6rem; color:var(--m)">Prélèvement le ${item.payDay} du mois</span>
-          ` : ''}
+      <div class="sh" style="${isPaid ? 'opacity:0.4' : ''}">
+        <div style="display:flex; flex-direction:column; gap:2px;">
+          <span style="font-weight:700; font-size:0.95rem">${item.name} ${isPaid ? '✅' : ''}</span>
+          ${item.isPlan ? `<span class="rem-info">Reste <span class="rem-total">${fmt(item.amount * item.monthsLeft)}</span> (${item.monthsLeft} mois)</span>` : ''}
         </div>
         <div style="display:flex; align-items:center; gap:15px">
-           <span class="ta" style="${isPaid ? 'text-decoration:line-through; opacity:0.5' : ''}">${fmt(item.amount)}</span>
-           <button onclick="deleteItem(${idx})" style="background:none; border:none; cursor:pointer">🗑</button>
+           <span class="ta" style="${isPaid ? 'text-decoration:line-through' : ''}">${fmt(item.amount)}</span>
+           <button onclick="del(${idx})" style="background:none; border:none; font-size:1.2rem; cursor:pointer; color:var(--m)">🗑</button>
         </div>
       </div>
     `;
     container.appendChild(div);
   });
-
-  document.getElementById('ct').innerText = fmt(totalMensuel);
-  document.getElementById('cr').innerText = fmt(totalRestantGlobal);
-
-  const addBtn = `<div class="ap"><button class="ba" onclick="oM()">➕ Ajouter une dépense / impôt</button></div>`;
-  container.insertAdjacentHTML('beforeend', addBtn);
+  document.getElementById('ct').innerText = fmt(totalM);
+  document.getElementById('cr').innerText = fmt(totalD);
 }
 
 function oM() { document.getElementById('modal').style.display = 'flex'; }
 function cM() { document.getElementById('modal').style.display = 'none'; }
 
 function confAdd() {
-  const name = document.getElementById('nn').value;
-  const amount = parseFloat(document.getElementById('na').value);
-  const isPlan = document.getElementById('is-plan').checked;
-  const months = parseInt(document.getElementById('n-months').value);
-  const day = parseInt(document.getElementById('pay-day').value);
-
-  if (name && amount) {
+  const n = document.getElementById('nn').value;
+  const a = parseFloat(document.getElementById('na').value);
+  const p = document.getElementById('is-plan').checked;
+  if (n && a) {
     ST.items.push({
-      name, amount, isPlan, 
-      monthsLeft: isPlan ? months : null,
-      payDay: isPlan ? day : null,
-      paidThisMonth: false
+      name: n, amount: a, isPlan: p,
+      monthsLeft: p ? parseInt(document.getElementById('n-months').value) : null,
+      payDay: p ? parseInt(document.getElementById('pay-day').value) : null,
+      paidM: false
     });
     save(); render(); cM();
+    document.getElementById('nn').value = ''; document.getElementById('na').value = '';
   }
 }
 
-function deleteItem(idx) { ST.items.splice(idx, 1); save(); render(); }
+function del(i) { if(confirm('Supprimer ?')) { ST.items.splice(i, 1); save(); render(); } }
 
-// Fonctions techniques Import/Export
 function showExport() {
-  document.getElementById('ms-title').innerText = "Code de sauvegarde";
+  document.getElementById('ms-title').innerText = "Exporter sauvegarde";
   document.getElementById('ms-box').value = btoa(JSON.stringify(ST));
-  document.getElementById('btn-valider-import').style.display = 'none';
+  document.getElementById('import-zone').style.display = 'none';
   document.getElementById('modal-save').style.display = 'flex';
 }
 function showImport() {
-  document.getElementById('ms-title').innerText = "Coller un code";
+  document.getElementById('ms-title').innerText = "Importer sauvegarde";
   document.getElementById('ms-box').value = "";
-  document.getElementById('btn-valider-import').style.display = 'block';
+  document.getElementById('import-zone').style.display = 'block';
   document.getElementById('modal-save').style.display = 'flex';
-  document.getElementById('btn-valider-import').onclick = function() {
+  document.getElementById('btn-confirm-import').onclick = function() {
     try {
-      ST = JSON.parse(atob(document.getElementById('ms-box').value));
-      save(); render(); closeMS();
-    } catch(e) { alert("Code invalide !"); }
+      const data = JSON.parse(atob(document.getElementById('ms-box').value));
+      if(data.items) { ST = data; save(); render(); closeMS(); }
+    } catch(e) { alert("Code erroné !"); }
   };
 }
 function closeMS() { document.getElementById('modal-save').style.display = 'none'; }
 
 render();
-// Vérifier toutes les heures si on a changé de jour/mois
-setInterval(render, 3600000);
+setInterval(render, 60000);
 </script>
 </body>
 </html>
